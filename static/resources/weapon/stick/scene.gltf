@@ -1,0 +1,568 @@
+{
+  "accessors": [
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 9128,
+      "max": [
+        65.240097045898438,
+        -28.351364135742188,
+        4.0573415756225586
+      ],
+      "min": [
+        48.659702301025391,
+        -273.46035766601562,
+        -12.45862865447998
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 109536,
+      "componentType": 5126,
+      "count": 9128,
+      "max": [
+        0.99997246265411377,
+        0.94222021102905273,
+        1
+      ],
+      "min": [
+        -0.99998378753662109,
+        -0.78218501806259155,
+        -0.99999517202377319
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 9128,
+      "max": [
+        0.99999988079071045,
+        0.10865399241447449,
+        1,
+        1
+      ],
+      "min": [
+        -0.97357010841369629,
+        -0.0020528272725641727,
+        -0.98726093769073486,
+        -1
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 146048,
+      "componentType": 5126,
+      "count": 9128,
+      "max": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "min": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 9228,
+      "max": [
+        9127
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 219072,
+      "componentType": 5126,
+      "count": 9143,
+      "max": [
+        65.240097045898438,
+        -28.288360595703125,
+        4.086338996887207
+      ],
+      "min": [
+        48.72900390625,
+        -273.64251708984375,
+        -12.470639228820801
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 328788,
+      "componentType": 5126,
+      "count": 9143,
+      "max": [
+        0.99994045495986938,
+        0.99428665637969971,
+        1
+      ],
+      "min": [
+        -0.99988079071044922,
+        -0.99870973825454712,
+        -0.99993711709976196
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 292096,
+      "componentType": 5126,
+      "count": 9143,
+      "max": [
+        0.99999910593032837,
+        0.035072643309831619,
+        1,
+        1
+      ],
+      "min": [
+        -0.99869734048843384,
+        -0.23817962408065796,
+        -0.99626654386520386,
+        -1
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 438384,
+      "componentType": 5126,
+      "count": 9143,
+      "max": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "min": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 36912,
+      "componentType": 5125,
+      "count": 9231,
+      "max": [
+        9142
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 438504,
+      "componentType": 5126,
+      "count": 9153,
+      "max": [
+        65.240097045898438,
+        -28.351364135742188,
+        4.086338996887207
+      ],
+      "min": [
+        48.659702301025391,
+        -273.64251708984375,
+        -12.470639228820801
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 548340,
+      "componentType": 5126,
+      "count": 9153,
+      "max": [
+        0.99995726346969604,
+        1,
+        0.99976891279220581
+      ],
+      "min": [
+        -0.99970388412475586,
+        -0.99858802556991577,
+        -0.99983102083206177
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 584672,
+      "componentType": 5126,
+      "count": 9153,
+      "max": [
+        1,
+        0.31227228045463562,
+        1,
+        1
+      ],
+      "min": [
+        -0.98618990182876587,
+        -0.034027352929115295,
+        -0.99642300605773926,
+        -1
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 731120,
+      "componentType": 5126,
+      "count": 9153,
+      "max": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "min": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 73836,
+      "componentType": 5125,
+      "count": 9261,
+      "max": [
+        9152
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 658176,
+      "componentType": 5126,
+      "count": 5084,
+      "max": [
+        65.240097045898438,
+        -28.36236572265625,
+        4.086338996887207
+      ],
+      "min": [
+        48.659702301025391,
+        -273.64251708984375,
+        -12.470639228820801
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 719184,
+      "componentType": 5126,
+      "count": 5084,
+      "max": [
+        1,
+        0.87938690185546875,
+        1
+      ],
+      "min": [
+        -0.99988466501235962,
+        -0.74428248405456543,
+        -0.99998074769973755
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 877568,
+      "componentType": 5126,
+      "count": 5084,
+      "max": [
+        1,
+        0.87345409393310547,
+        0.99999743700027466,
+        1
+      ],
+      "min": [
+        -0.98373609781265259,
+        -0.95956629514694214,
+        -0.98368889093399048,
+        -1
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 958912,
+      "componentType": 5126,
+      "count": 5084,
+      "max": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "min": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 110880,
+      "componentType": 5125,
+      "count": 5142,
+      "max": [
+        5083
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "JDi Design (https://sketchfab.com/jdidesign)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/models/106153ecee9d45b195a565c7abfb7095",
+      "title": "Gnarly Stick - some call it a wand"
+    },
+    "generator": "Sketchfab-3.29.3",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 131448,
+      "byteOffset": 0,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 780192,
+      "byteOffset": 131448,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 1040256,
+      "byteOffset": 911640,
+      "byteStride": 16,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 1951896,
+      "uri": "scene.bin"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "emissiveFactor": [
+        0,
+        0,
+        0
+      ],
+      "name": "gnarly_sticMtl1",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.10011399999999999,
+          0.030973500000000001,
+          0.00033654699999999997,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.59999999999999998
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "COLOR_0": 3,
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TANGENT": 2
+          },
+          "indices": 4,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "COLOR_0": 8,
+            "NORMAL": 6,
+            "POSITION": 5,
+            "TANGENT": 7
+          },
+          "indices": 9,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "COLOR_0": 13,
+            "NORMAL": 11,
+            "POSITION": 10,
+            "TANGENT": 12
+          },
+          "indices": 14,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "COLOR_0": 18,
+            "NORMAL": 16,
+            "POSITION": 15,
+            "TANGENT": 17
+          },
+          "indices": 19,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "name": "RootNode (gltf orientation matrix)",
+      "rotation": [
+        -0.70710678118654746,
+        -0,
+        -0,
+        0.70710678118654757
+      ]
+    },
+    {
+      "children": [
+        2
+      ],
+      "name": "RootNode (model correction matrix)"
+    },
+    {
+      "children": [
+        3
+      ],
+      "name": "gnarly-stick.3ds"
+    },
+    {
+      "children": [
+        4
+      ],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        56.949897766113281,
+        -150.96543884277344,
+        -4.1921501159667969,
+        1
+      ],
+      "name": "Dummy gnar"
+    },
+    {
+      "children": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -56.949897766113281,
+        150.96543884277344,
+        4.1921501159667969,
+        1
+      ],
+      "name": "3DSMeshMatrix"
+    },
+    {
+      "mesh": 0,
+      "name": ""
+    },
+    {
+      "mesh": 1,
+      "name": ""
+    },
+    {
+      "mesh": 2,
+      "name": ""
+    },
+    {
+      "mesh": 3,
+      "name": ""
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "OSG_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ]
+}
+
