@@ -1,71 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6ec4bab4-7a8a-4302-b62b-18371351d8b0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/static/libs/Tool.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/libs/FirstPersonControl.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/libs/FirstPersonControl.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/bowl/scene.gltf" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/container/bowl/scene.gltf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/cup/scene.gltf" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/container/cup/scene.gltf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/egg/scene.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/egg/scene.gltf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/egg/textures/egg-rc-tex_Material_u1_v1_baseColor.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/egg/textures/egg-rc-tex_Material_u1_v1_normal.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/flagon/scene.bin" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/container/flagon/scene.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/flagon/scene.gltf" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/container/flagon/scene.gltf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/flagon/textures/Material_2_baseColor.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/jar/scene.bin" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/container/jar/scene.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/jar/scene.gltf" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/container/jar/scene.gltf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/jar/textures/COOKIE_JAR_baseColor.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/jar/textures/COOKIE_JAR_metallicRoughness.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/jar/textures/COOKIE_JAR_normal.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/kelin/scene.gltf" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/container/kelin/scene.gltf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/kettle/scene.bin" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/container/kettle/scene.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/kettle/scene.gltf" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/container/kettle/scene.gltf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/kettle/textures/blinn1_baseColor.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/kettle/textures/blinn1_metallicRoughness.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/kettle/textures/blinn1_normal.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/kettle/textures/blinn2_baseColor.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/kettle/textures/blinn2_metallicRoughness.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/kettle/textures/blinn2_normal.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/plate/scene.gltf" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/container/plate/scene.gltf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/pot/scene.gltf" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/container/pot/scene.gltf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/vase/scene.bin" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/container/vase/scene.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/vase/scene.gltf" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/container/vase/scene.gltf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/vase/textures/Material_baseColor.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/vase/textures/Material_metallicRoughness.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/container/vase/textures/Material_normal.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/axe/scene.gltf" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/weapon/axe/scene.gltf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/boomerang/scene.bin" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/weapon/boomerang/scene.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/boomerang/scene.gltf" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/weapon/boomerang/scene.gltf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/boomerang/textures/Scene_-_Root_diffuse.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/boomerang/textures/Scene_-_Root_occlusion.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/boomerang/textures/Scene_-_Root_specularGlossiness.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/catapult/scene.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/catapult/scene.gltf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/catapult/textures/lambert3SG_baseColor.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/catapult/textures/lambert4SG_baseColor.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/catapult/textures/lambert6SG_baseColor.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/catapult/textures/lambert7SG_baseColor.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/catapult/textures/lambert8SG_baseColor.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/catapult/textures/pasted__lambert2SG_baseColor.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/crossbow/scene.bin" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/weapon/crossbow/scene.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/crossbow/scene.gltf" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/weapon/crossbow/scene.gltf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/crossbow/textures/BestaArcoFlechaAmarra_baseColor.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/crossbow/textures/BestaDetalhe_baseColor.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/crossbow/textures/BestaMadeiraSuporte.001_baseColor.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/crossbow/textures/BestaMadeiraSuporte.002_baseColor.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/halberd/scene.gltf" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/weapon/halberd/scene.gltf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/knife/scene.gltf" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/weapon/knife/scene.gltf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/lance/scene.bin" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/weapon/lance/scene.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/lance/scene.gltf" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/weapon/lance/scene.gltf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/lance/textures/pCylinder2_baseColor.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/lance/textures/pCylinder2_metallicRoughness.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/lance/textures/pCylinder2_normal.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/spear/scene.gltf" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/weapon/spear/scene.gltf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/stick/scene.gltf" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/weapon/stick/scene.gltf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/resources/weapon/sword/scene.gltf" beforeDir="false" afterPath="$PROJECT_DIR$/static/resources/weapon/sword/scene.gltf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/scene.html" beforeDir="false" afterPath="$PROJECT_DIR$/views/scene.html" afterDir="false" />
-    </list>
+    <list default="true" id="6ec4bab4-7a8a-4302-b62b-18371351d8b0" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -77,20 +13,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/views/scene.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5926">
-              <caret line="450" column="74" selection-start-line="450" selection-start-column="74" selection-end-line="450" selection-end-column="74" />
+            <state relative-caret-position="5151">
+              <caret line="224" column="45" selection-start-line="224" selection-start-column="45" selection-end-line="224" selection-end-column="45" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/static/libs/FirstPersonControl.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="556">
-              <caret line="143" column="27" lean-forward="true" selection-start-line="143" selection-start-column="27" selection-end-line="143" selection-end-column="27" />
+            <state relative-caret-position="325">
+              <caret line="16" column="54" lean-forward="true" selection-start-line="16" selection-start-column="54" selection-end-line="16" selection-end-column="54" />
             </state>
           </provider>
         </entry>
@@ -135,9 +71,9 @@
   </component>
   <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="770" />
-    <option name="y" value="11" />
+    <option name="y" value="10" />
     <option name="width" value="1115" />
-    <option name="height" value="1039" />
+    <option name="height" value="1040" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -176,7 +112,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="E:/Project/WebStromProjects/lab2" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -204,15 +140,15 @@
       <option name="presentableId" value="Default" />
       <updated>1558508802989</updated>
       <workItem from="1558508804779" duration="255000" />
-      <workItem from="1558601706564" duration="5033000" />
+      <workItem from="1558601706564" duration="5901000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5288000" />
+    <option name="totallyTimeSpent" value="6156000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14068693" />
@@ -246,17 +182,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/scene.html">
+    <entry file="file://$PROJECT_DIR$/static/libs/FirstPersonControl.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5926">
-          <caret line="450" column="74" selection-start-line="450" selection-start-column="74" selection-end-line="450" selection-end-column="74" />
+        <state relative-caret-position="325">
+          <caret line="16" column="54" lean-forward="true" selection-start-line="16" selection-start-column="54" selection-end-line="16" selection-end-column="54" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/libs/FirstPersonControl.js">
+    <entry file="file://$PROJECT_DIR$/views/scene.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="556">
-          <caret line="143" column="27" lean-forward="true" selection-start-line="143" selection-start-column="27" selection-end-line="143" selection-end-column="27" />
+        <state relative-caret-position="5151">
+          <caret line="224" column="45" selection-start-line="224" selection-start-column="45" selection-end-line="224" selection-end-column="45" />
         </state>
       </provider>
     </entry>

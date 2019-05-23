@@ -270,6 +270,11 @@
         let operationMesh = new THREE.Mesh(operationGeo,operationMaterial);
         operationMesh.position.set(-500,37,0);
         scenes[0].add(operationMesh);
+        loader.load("/resources/museum/scene.gltf", function (mesh) {
+            mesh.scene.scale.set(160,160,160);
+            mesh.scene.position.set(0,0,-800);
+            scenes[0].add(mesh.scene);
+        });
     }
 
     //容器厅 器

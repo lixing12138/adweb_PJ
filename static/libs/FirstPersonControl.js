@@ -141,7 +141,7 @@ class FirstPersonControls {
         // 将pitObject添加到yawObject, 使camera沿竖直轴旋转
         this.yawObject = new THREE.Object3D();
         this.yawObject.add(this.pitchObject);
-        this.yawObject.position.y = 1000;
+        this.yawObject.position.z = 1000;
     }
 
     onPointerlockChange() {
