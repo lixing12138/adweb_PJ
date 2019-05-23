@@ -105,4 +105,4 @@ function getRandomPosition() {
     position[1] = Math.random() * 580 + 10;
     position[2] = Math.random() * 3980 - 15;
     return position;
-}}
+}
