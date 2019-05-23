@@ -3,50 +3,50 @@
     {
       "bufferView": 2,
       "componentType": 5126,
-      "count": 4905,
+      "count": 3059,
       "max": [
-        0.76309102773666382,
-        0.62901097536087036,
-        0.76305097341537476
+        7.2646198272705078,
+        7.2646198272705078,
+        11.376540184020996
       ],
       "min": [
-        -0.76309102773666382,
-        -1,
-        -0.76305097341537476
+        -7.2646398544311523,
+        -7.2646298408508301,
+        0.051199998706579208
       ],
       "type": "VEC3"
     },
     {
       "bufferView": 2,
-      "byteOffset": 58860,
+      "byteOffset": 36708,
       "componentType": 5126,
-      "count": 4905,
+      "count": 3059,
       "max": [
-        0.99999988079071045,
-        0.99986749887466431,
-        0.99999988079071045
+        1,
+        1,
+        0.99999874830245972
       ],
       "min": [
-        -0.99999988079071045,
         -1,
-        -0.99999988079071045
+        -1,
+        -0.99999874830245972
       ],
       "type": "VEC3"
     },
     {
       "bufferView": 3,
       "componentType": 5126,
-      "count": 4905,
+      "count": 3059,
       "max": [
         1,
-        0.035869725048542023,
-        1,
+        0.99969333410263062,
+        0.9995197057723999,
         1
       ],
       "min": [
-        -1,
-        -0.035869557410478592,
-        -1,
+        -0.99999827146530151,
+        -0.99966692924499512,
+        -0.99988609552383423,
         1
       ],
       "type": "VEC4"
@@ -54,104 +54,23 @@
     {
       "bufferView": 1,
       "componentType": 5126,
-      "count": 4905,
+      "count": 3059,
       "max": [
-        0.99401301145553589,
-        0.91556501388549805
+        0.99984997510910034,
+        0.98211002349853516
       ],
       "min": [
-        0.005940999835729599,
-        0.048183001577854156
+        0.0001500000071246177,
+        0.0001500000071246177
       ],
       "type": "VEC2"
     },
     {
       "bufferView": 0,
       "componentType": 5125,
-      "count": 28512,
+      "count": 17322,
       "max": [
-        4904
-      ],
-      "min": [
-        0
-      ],
-      "type": "SCALAR"
-    },
-    {
-      "bufferView": 2,
-      "byteOffset": 117720,
-      "componentType": 5126,
-      "count": 8731,
-      "max": [
-        0.55020201206207275,
-        1,
-        0.54275500774383545
-      ],
-      "min": [
-        -0.5353659987449646,
-        0.56106102466583252,
-        -0.54275500774383545
-      ],
-      "type": "VEC3"
-    },
-    {
-      "bufferView": 2,
-      "byteOffset": 222492,
-      "componentType": 5126,
-      "count": 8731,
-      "max": [
-        0.99999988079071045,
-        1,
-        0.99999988079071045
-      ],
-      "min": [
-        -0.99999988079071045,
-        -0.99949914216995239,
-        -0.99999988079071045
-      ],
-      "type": "VEC3"
-    },
-    {
-      "bufferView": 3,
-      "byteOffset": 78480,
-      "componentType": 5126,
-      "count": 8731,
-      "max": [
-        1,
-        0.9999854564666748,
-        1,
-        1
-      ],
-      "min": [
-        -1,
-        -0.77629560232162476,
-        -1,
-        1
-      ],
-      "type": "VEC4"
-    },
-    {
-      "bufferView": 1,
-      "byteOffset": 39240,
-      "componentType": 5126,
-      "count": 8731,
-      "max": [
-        0.93781101703643799,
-        0.95664900541305542
-      ],
-      "min": [
-        0.029732000082731247,
-        0.10855700075626373
-      ],
-      "type": "VEC2"
-    },
-    {
-      "bufferView": 0,
-      "byteOffset": 114048,
-      "componentType": 5125,
-      "count": 50556,
-      "max": [
-        8730
+        3058
       ],
       "min": [
         0
@@ -161,42 +80,42 @@
   ],
   "asset": {
     "extras": {
-      "author": "Timzero4 (https://sketchfab.com/timzero4)",
-      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
-      "source": "https://sketchfab.com/models/1c97dc77eaee4112b4dd64be804e26c6",
-      "title": "Cookie Jar"
+      "author": "sb129 (https://sketchfab.com/sb129)",
+      "license": "CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)",
+      "source": "https://sketchfab.com/models/9312e1be076245e58613e906d76a002c",
+      "title": "Korin's Senzu Bean Jar"
     },
-    "generator": "Sketchfab-3.33.1",
+    "generator": "Sketchfab-3.36.0",
     "version": "2.0"
   },
   "bufferViews": [
     {
       "buffer": 0,
-      "byteLength": 316272,
+      "byteLength": 69288,
       "byteOffset": 0,
       "name": "floatBufferViews",
       "target": 34963
     },
     {
       "buffer": 0,
-      "byteLength": 109088,
-      "byteOffset": 316272,
+      "byteLength": 24472,
+      "byteOffset": 69288,
       "byteStride": 8,
       "name": "floatBufferViews",
       "target": 34962
     },
     {
       "buffer": 0,
-      "byteLength": 327264,
-      "byteOffset": 425360,
+      "byteLength": 73416,
+      "byteOffset": 93760,
       "byteStride": 12,
       "name": "floatBufferViews",
       "target": 34962
     },
     {
       "buffer": 0,
-      "byteLength": 218176,
-      "byteOffset": 752624,
+      "byteLength": 48944,
+      "byteOffset": 167176,
       "byteStride": 16,
       "name": "floatBufferViews",
       "target": 34962
@@ -204,35 +123,24 @@
   ],
   "buffers": [
     {
-      "byteLength": 970800,
+      "byteLength": 216120,
       "uri": "scene.bin"
     }
   ],
   "images": [
     {
-      "uri": "textures/COOKIE_JAR_baseColor.jpeg"
-    },
-    {
-      "uri": "textures/COOKIE_JAR_metallicRoughness.png"
-    },
-    {
-      "uri": "textures/COOKIE_JAR_normal.png"
+      "uri": "textures/material_baseColor.png"
     }
   ],
   "materials": [
     {
       "doubleSided": true,
-      "name": "COOKIE_JAR",
-      "normalTexture": {
-        "index": 2,
-        "scale": 1,
-        "texCoord": 0
-      },
-      "occlusionTexture": {
-        "index": 1,
-        "strength": 1,
-        "texCoord": 0
-      },
+      "emissiveFactor": [
+        0.099999993999999995,
+        0.099999993999999995,
+        0.099999993999999995
+      ],
+      "name": "material",
       "pbrMetallicRoughness": {
         "baseColorFactor": [
           1,
@@ -244,18 +152,14 @@
           "index": 0,
           "texCoord": 0
         },
-        "metallicFactor": 1,
-        "metallicRoughnessTexture": {
-          "index": 1,
-          "texCoord": 0
-        },
-        "roughnessFactor": 1
+        "metallicFactor": 0,
+        "roughnessFactor": 0.59999999999999998
       }
     }
   ],
   "meshes": [
     {
-      "name": "defaultMaterial",
+      "name": "Jar_0",
       "primitives": [
         {
           "attributes": {
@@ -265,22 +169,6 @@
             "TEXCOORD_0": 3
           },
           "indices": 4,
-          "material": 0,
-          "mode": 4
-        }
-      ]
-    },
-    {
-      "name": "defaultMaterial",
-      "primitives": [
-        {
-          "attributes": {
-            "NORMAL": 6,
-            "POSITION": 5,
-            "TANGENT": 7,
-            "TEXCOORD_0": 8
-          },
-          "indices": 9,
           "material": 0,
           "mode": 4
         }
@@ -309,47 +197,92 @@
     {
       "children": [
         3,
-        5
+        5,
+        7
+      ],
+      "name": "Root"
+    },
+    {
+      "children": [
+        4
       ],
       "matrix": [
+        -0.29086000000000006,
+        0.95517000000000007,
+        -0.05519000000000001,
+        0,
+        -0.77110000000000001,
+        -0.19988000000000003,
+        0.60452000000000006,
+        0,
+        0.56639000000000006,
+        0.21839000000000003,
+        0.7946700000000001,
+        0,
+        4.0762500000000008,
+        1.00545,
+        5.9038600000000008,
+        1
+      ],
+      "name": "Lamp"
+    },
+    {
+      "name": "Lamp"
+    },
+    {
+      "children": [
+        6
+      ],
+      "matrix": [
+        -0,
         1,
         0,
         0,
+        -1,
+        -0,
         0,
         0,
-        -4.3711390063094768e-08,
-        0.999999999999999,
         0,
         0,
-        -0.999999999999999,
-        -4.3711390063094768e-08,
+        1,
         0,
         0,
         0,
         0,
         1
       ],
-      "name": "Collada visual scene group"
-    },
-    {
-      "children": [
-        4
-      ],
-      "name": "BezierCurve"
+      "name": "Jar"
     },
     {
       "mesh": 0,
-      "name": "defaultMaterial"
+      "name": "Jar_0"
     },
     {
       "children": [
-        6
+        8
       ],
-      "name": "BezierCurve_001"
+      "matrix": [
+        0.98034999999999994,
+        0,
+        -0.19727000000000003,
+        0,
+        0.16375000000000003,
+        0.55766000000000004,
+        0.81375000000000008,
+        0,
+        0.11001000000000001,
+        -0.83007000000000009,
+        0.54671000000000003,
+        0,
+        4.53681,
+        -30.616230000000002,
+        23.167080000000002,
+        1
+      ],
+      "name": "Sun"
     },
     {
-      "mesh": 1,
-      "name": "defaultMaterial"
+      "name": "Sun"
     }
   ],
   "samplers": [
@@ -373,14 +306,6 @@
     {
       "sampler": 0,
       "source": 0
-    },
-    {
-      "sampler": 0,
-      "source": 1
-    },
-    {
-      "sampler": 0,
-      "source": 2
     }
   ]
 }

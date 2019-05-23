@@ -3,50 +3,69 @@
     {
       "bufferView": 2,
       "componentType": 5126,
-      "count": 6074,
+      "count": 21229,
       "max": [
-        0.5,
-        0.5,
-        0.9180300235748291
+        32.704006195068359,
+        26.21832275390625,
+        89.523597717285156
       ],
       "min": [
-        -0.5,
-        -0.5,
-        -0
+        -26.418420791625977,
+        -32.266635894775391,
+        -2.3632099628448486
       ],
       "type": "VEC3"
     },
     {
       "bufferView": 2,
-      "byteOffset": 72888,
+      "byteOffset": 254748,
       "componentType": 5126,
-      "count": 6074,
+      "count": 21229,
       "max": [
-        0.99999982118606567,
-        0.99999982118606567,
-        1
+        0.99995803833007812,
+        0.9999922513961792,
+        0.99998986721038818
       ],
       "min": [
-        -0.99999982118606567,
-        -0.99999982118606567,
-        -1
+        -0.99998718500137329,
+        -0.99988412857055664,
+        -0.99963337182998657
       ],
       "type": "VEC3"
     },
     {
       "bufferView": 3,
       "componentType": 5126,
-      "count": 6074,
+      "count": 21229,
       "max": [
-        0.99999904632568359,
-        0.7211797833442688,
-        0.99998122453689575,
+        0.99999934434890747,
+        0.99999988079071045,
+        0.99688494205474854,
         1
       ],
       "min": [
-        -0.99994474649429321,
-        -0.99957656860351562,
-        -0.94977116584777832,
+        -0.99999880790710449,
+        -0.99999749660491943,
+        -0.95146745443344116,
+        -1
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 3,
+      "byteOffset": 339664,
+      "componentType": 5126,
+      "count": 21229,
+      "max": [
+        0.75294101238250732,
+        0.75294101238250732,
+        0.75294101238250732,
+        1
+      ],
+      "min": [
+        0.75294101238250732,
+        0.75294101238250732,
+        0.75294101238250732,
         1
       ],
       "type": "VEC4"
@@ -54,23 +73,23 @@
     {
       "bufferView": 1,
       "componentType": 5126,
-      "count": 6074,
+      "count": 21229,
       "max": [
-        0.99713999032974243,
-        0.84430998563766479
+        1.0029189586639404,
+        0.99820202589035034
       ],
       "min": [
-        0.0031300000846385956,
-        0.0028599998913705349
+        3.9999999899009708e-06,
+        -0.0003169999981764704
       ],
       "type": "VEC2"
     },
     {
       "bufferView": 0,
       "componentType": 5125,
-      "count": 34944,
+      "count": 126966,
       "max": [
-        6073
+        21228
       ],
       "min": [
         0
@@ -80,42 +99,42 @@
   ],
   "asset": {
     "extras": {
-      "author": "energyoverflow (https://sketchfab.com/energyoverflow)",
+      "author": "Rubicon Technologies (https://sketchfab.com/pocketcloud)",
       "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
-      "source": "https://sketchfab.com/models/0d2872e2a3474ec899c4fdd009701dca",
-      "title": "Cracked Porcelain Vase"
+      "source": "https://sketchfab.com/models/aa4f95de38844582a669397e5901785b",
+      "title": "Vase 3d scan"
     },
-    "generator": "Sketchfab-3.29.3",
+    "generator": "Sketchfab-3.20.7",
     "version": "2.0"
   },
   "bufferViews": [
     {
       "buffer": 0,
-      "byteLength": 139776,
+      "byteLength": 507864,
       "byteOffset": 0,
       "name": "floatBufferViews",
       "target": 34963
     },
     {
       "buffer": 0,
-      "byteLength": 48592,
-      "byteOffset": 139776,
+      "byteLength": 169832,
+      "byteOffset": 507864,
       "byteStride": 8,
       "name": "floatBufferViews",
       "target": 34962
     },
     {
       "buffer": 0,
-      "byteLength": 145776,
-      "byteOffset": 188368,
+      "byteLength": 509496,
+      "byteOffset": 677696,
       "byteStride": 12,
       "name": "floatBufferViews",
       "target": 34962
     },
     {
       "buffer": 0,
-      "byteLength": 97184,
-      "byteOffset": 334144,
+      "byteLength": 679328,
+      "byteOffset": 1187192,
       "byteStride": 16,
       "name": "floatBufferViews",
       "target": 34962
@@ -123,19 +142,13 @@
   ],
   "buffers": [
     {
-      "byteLength": 431328,
+      "byteLength": 1866520,
       "uri": "scene.bin"
     }
   ],
   "images": [
     {
-      "uri": "textures/Material_baseColor.png"
-    },
-    {
-      "uri": "textures/Material_normal.png"
-    },
-    {
-      "uri": "textures/Material_metallicRoughness.png"
+      "uri": "textures/material_0_baseColor.png"
     }
   ],
   "materials": [
@@ -146,12 +159,7 @@
         0,
         0
       ],
-      "name": "Material",
-      "normalTexture": {
-        "index": 1,
-        "scale": 1,
-        "texCoord": 0
-      },
+      "name": "material_0",
       "pbrMetallicRoughness": {
         "baseColorFactor": [
           1,
@@ -163,27 +171,23 @@
           "index": 0,
           "texCoord": 0
         },
-        "metallicFactor": 0.5,
-        "metallicRoughnessTexture": {
-          "index": 2,
-          "texCoord": 0
-        },
-        "roughnessFactor": 0.13
+        "metallicFactor": 0,
+        "roughnessFactor": 0.59999999999999998
       }
     }
   ],
   "meshes": [
     {
-      "name": "Plane",
       "primitives": [
         {
           "attributes": {
+            "COLOR_0": 3,
             "NORMAL": 1,
             "POSITION": 0,
             "TANGENT": 2,
-            "TEXCOORD_0": 3
+            "TEXCOORD_0": 4
           },
-          "indices": 4,
+          "indices": 5,
           "material": 0,
           "mode": 4
         }
@@ -213,17 +217,11 @@
       "children": [
         3
       ],
-      "name": "Root"
-    },
-    {
-      "children": [
-        4
-      ],
-      "name": "Plane"
+      "name": "vas.obj.cleaner"
     },
     {
       "mesh": 0,
-      "name": "Plane"
+      "name": ""
     }
   ],
   "samplers": [
@@ -247,14 +245,6 @@
     {
       "sampler": 0,
       "source": 0
-    },
-    {
-      "sampler": 0,
-      "source": 1
-    },
-    {
-      "sampler": 0,
-      "source": 2
     }
   ]
 }

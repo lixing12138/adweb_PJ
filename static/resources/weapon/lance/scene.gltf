@@ -1,76 +1,91 @@
 {
   "accessors": [
     {
-      "bufferView": 2,
+      "bufferView": 1,
       "componentType": 5126,
-      "count": 2624,
+      "count": 160,
       "max": [
-        0.052654199302196503,
-        0.055361200124025345,
-        1
+        1,
+        1,
+        1.0305900573730469
       ],
       "min": [
-        -0.052654199302196503,
-        -0.055361200124025345,
-        -1
+        -1,
+        -1,
+        -2.5697999000549316
       ],
       "type": "VEC3"
-    },
-    {
-      "bufferView": 2,
-      "byteOffset": 31488,
-      "componentType": 5126,
-      "count": 2624,
-      "max": [
-        1,
-        1,
-        1
-      ],
-      "min": [
-        -1,
-        -1,
-        -1
-      ],
-      "type": "VEC3"
-    },
-    {
-      "bufferView": 3,
-      "componentType": 5126,
-      "count": 2624,
-      "max": [
-        1,
-        1,
-        0.99144399166107178,
-        1
-      ],
-      "min": [
-        -0.95865398645401001,
-        -1,
-        -0.98965698480606079,
-        -1
-      ],
-      "type": "VEC4"
     },
     {
       "bufferView": 1,
+      "byteOffset": 1920,
       "componentType": 5126,
-      "count": 2624,
+      "count": 160,
       "max": [
-        0.54234898090362549,
-        0.99800801277160645
+        0.99518442153930664,
+        0.99518442153930664,
+        -0
       ],
       "min": [
-        0.0010825600475072861,
-        0.0019920100457966328
+        -0.99518442153930664,
+        -0.99518442153930664,
+        -1
       ],
-      "type": "VEC2"
+      "type": "VEC3"
     },
     {
       "bufferView": 0,
       "componentType": 5125,
-      "count": 12240,
+      "count": 282,
       "max": [
-        2623
+        159
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 3840,
+      "componentType": 5126,
+      "count": 9155,
+      "max": [
+        10.787989616394043,
+        2.6464099884033203,
+        3.0778698921203613
+      ],
+      "min": [
+        -10.787989616394043,
+        -2.6464099884033203,
+        -3.0768001079559326
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 113700,
+      "componentType": 5126,
+      "count": 9155,
+      "max": [
+        1,
+        1,
+        1
+      ],
+      "min": [
+        -1,
+        -1,
+        -1
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 1128,
+      "componentType": 5125,
+      "count": 21540,
+      "max": [
+        9154
       ],
       "min": [
         0
@@ -80,62 +95,35 @@
   ],
   "asset": {
     "extras": {
-      "author": "dalyf (https://sketchfab.com/dalyf)",
+      "author": "Brukas (https://sketchfab.com/Brukas)",
       "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
-      "source": "https://sketchfab.com/3d-models/power-lance-c6ce26d2134a47feafea39004ed54887",
-      "title": "Power Lance"
+      "source": "https://sketchfab.com/models/707cb68e86154d4fb9700d40f4d58cd6",
+      "title": "Azura Spear (Fire Emblem)"
     },
-    "generator": "Sketchfab-4.45.0",
+    "generator": "Sketchfab-3.23.4",
     "version": "2.0"
   },
   "bufferViews": [
     {
       "buffer": 0,
-      "byteLength": 48960,
+      "byteLength": 87288,
       "byteOffset": 0,
       "name": "floatBufferViews",
       "target": 34963
     },
     {
       "buffer": 0,
-      "byteLength": 20992,
-      "byteOffset": 48960,
-      "byteStride": 8,
-      "name": "floatBufferViews",
-      "target": 34962
-    },
-    {
-      "buffer": 0,
-      "byteLength": 62976,
-      "byteOffset": 69952,
+      "byteLength": 223560,
+      "byteOffset": 87288,
       "byteStride": 12,
-      "name": "floatBufferViews",
-      "target": 34962
-    },
-    {
-      "buffer": 0,
-      "byteLength": 41984,
-      "byteOffset": 132928,
-      "byteStride": 16,
       "name": "floatBufferViews",
       "target": 34962
     }
   ],
   "buffers": [
     {
-      "byteLength": 174912,
+      "byteLength": 310848,
       "uri": "scene.bin"
-    }
-  ],
-  "images": [
-    {
-      "uri": "textures/pCylinder2_metallicRoughness.png"
-    },
-    {
-      "uri": "textures/pCylinder2_normal.jpeg"
-    },
-    {
-      "uri": "textures/pCylinder2_baseColor.jpeg"
     }
   ],
   "materials": [
@@ -146,12 +134,7 @@
         0,
         0
       ],
-      "name": "pCylinder2",
-      "normalTexture": {
-        "index": 1,
-        "scale": 1,
-        "texCoord": 0
-      },
+      "name": "Blanc",
       "pbrMetallicRoughness": {
         "baseColorFactor": [
           1,
@@ -159,32 +142,55 @@
           1,
           1
         ],
-        "baseColorTexture": {
-          "index": 2,
-          "texCoord": 0
-        },
-        "metallicFactor": 1,
-        "metallicRoughnessTexture": {
-          "index": 0,
-          "texCoord": 0
-        },
-        "roughnessFactor": 1
+        "metallicFactor": 0,
+        "roughnessFactor": 0.59999999999999998
+      }
+    },
+    {
+      "doubleSided": true,
+      "emissiveFactor": [
+        0,
+        0,
+        0
+      ],
+      "name": "Material",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.93512827160000001,
+          0.71544790270000003,
+          0.044021543099999998,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.59999999999999998
       }
     }
   ],
   "meshes": [
     {
-      "name": "defaultMaterial",
+      "name": "Cylinder_0",
       "primitives": [
         {
           "attributes": {
             "NORMAL": 1,
-            "POSITION": 0,
-            "TANGENT": 2,
-            "TEXCOORD_0": 3
+            "POSITION": 0
           },
-          "indices": 4,
+          "indices": 2,
           "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Cylinder_1",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 4,
+            "POSITION": 3
+          },
+          "indices": 5,
+          "material": 1,
           "mode": 4
         }
       ]
@@ -207,49 +213,92 @@
       "children": [
         2
       ],
+      "matrix": [
+        0.52973884344100952,
+        0.14136292040348053,
+        0.83629733324050903,
+        0,
+        -0.80761629343032837,
+        -0.21714034676551819,
+        0.54827547073364258,
+        0,
+        0.25909972190856934,
+        -0.96585017442703247,
+        -0.00086068158270791173,
+        0,
+        0.00082856661174446344,
+        0.001249071559868753,
+        -0.00056228082394227386,
+        1
+      ],
       "name": "RootNode (model correction matrix)"
     },
     {
       "children": [
-        3
+        3,
+        5
+      ],
+      "name": "Root"
+    },
+    {
+      "children": [
+        4
       ],
       "matrix": [
-        1,
+        -0.29086000000000006,
+        0.95517000000000007,
+        -0.05519000000000001,
+        0,
+        -0.77110000000000001,
+        -0.19988000000000003,
+        0.60452000000000006,
+        0,
+        0.56639000000000006,
+        0.21839000000000003,
+        0.7946700000000001,
+        0,
+        4.0762500000000008,
+        1.00545,
+        5.9038600000000008,
+        1
+      ],
+      "name": "Lamp"
+    },
+    {
+      "name": "Lamp"
+    },
+    {
+      "children": [
+        6,
+        7
+      ],
+      "matrix": [
+        0.081650000000000014,
         0,
         0,
         0,
         0,
-        -4.3711390063094768e-08,
-        0.999999999999999,
         0,
+        -0.081650000000000014,
         0,
-        -0.999999999999999,
-        -4.3711390063094768e-08,
+        -0,
+        1.9392699999999998,
+        0,
         0,
         0,
         0,
         0,
         1
       ],
-      "name": "Collada visual scene group"
-    },
-    {
-      "children": [
-        4
-      ],
-      "name": "pCylinder2"
+      "name": "Cylinder"
     },
     {
       "mesh": 0,
-      "name": "defaultMaterial"
-    }
-  ],
-  "samplers": [
+      "name": "Cylinder_0"
+    },
     {
-      "magFilter": 9729,
-      "minFilter": 9987,
-      "wrapS": 10497,
-      "wrapT": 10497
+      "mesh": 1,
+      "name": "Cylinder_1"
     }
   ],
   "scene": 0,
@@ -259,20 +308,6 @@
       "nodes": [
         0
       ]
-    }
-  ],
-  "textures": [
-    {
-      "sampler": 0,
-      "source": 0
-    },
-    {
-      "sampler": 0,
-      "source": 1
-    },
-    {
-      "sampler": 0,
-      "source": 2
     }
   ]
 }

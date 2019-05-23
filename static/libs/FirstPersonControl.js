@@ -17,6 +17,7 @@ class FirstPersonControls {
         this.domElement = domElement || document.body;
         this.isLocked = false;
         this.camera = camera;
+        this.speed = 150;
         // 初始化移动状态
         this.moveForward = false;
         this.moveBackward = false;
@@ -29,6 +30,8 @@ class FirstPersonControls {
 
         this.clickHandler = this.domElement.requestPointerLock;
         this.onKeyDown = function(event) {
+            if(event.shiftKey)
+                this.speed = 300;
             if (this.canChat != true) {
                 switch (event.keyCode) {
                     case KEY_W:
@@ -133,11 +136,12 @@ class FirstPersonControls {
         // 将camera添加到pitchObject, 使camera沿水平轴做旋转, 并提升pitchObject的相对高度
         this.pitchObject = new THREE.Object3D();
         this.pitchObject.add(camera);
-        this.pitchObject.position.y = 10;
+        this.pitchObject.position.y = 20;
 
         // 将pitObject添加到yawObject, 使camera沿竖直轴旋转
         this.yawObject = new THREE.Object3D();
         this.yawObject.add(this.pitchObject);
+        this.yawObject.position.y = 1000;
     }
 
     onPointerlockChange() {
@@ -183,6 +187,7 @@ class FirstPersonControls {
         if (this.moveLeft || this.moveRight) {
             this.yawObject.translateX(moveSpeed * direction.x * delta);
         }
+        this.speed = 150;
     };
 
     connect() {

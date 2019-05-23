@@ -8,17 +8,17 @@
         body {
             margin: 0;
         }
-        
+
         canvas {
             width: 100%;
             height: 100%
         }
-        
+
         #chat {
             position: relative;
             display: none;
         }
-        
+
         #chatLog {
             min-width: 250px;
             max-width: 250px;
@@ -27,17 +27,17 @@
             background-color: rgba(186, 215, 193, 0.19);
             overflow: auto;
         }
-        
+
         #scrollbar-y {
             margin: 0 auto;
         }
-        
+
         #scrollbar-x {
             width: 30px;
             height: 30px;
             margin: auto 0;
         }
-        
+
         #block {
             width: 260px;
             z-index: 10;
@@ -45,26 +45,26 @@
             left: 10px;
             bottom: 20px;
         }
-        
+
         #chatLog::-webkit-scrollbar {
             /*滚动条整体样式*/
             width: 10px;
             /*高宽分别对应横竖滚动条的尺寸*/
             height: 10px;
         }
-        
+
         #chatLog::-webkit-scrollbar-thumb {
             /*滚动条里面小方块*/
             border-radius: 10px;
             background: rgba(83, 83, 83, 0.6);
         }
-        
+
         #chatLog::-webkit-scrollbar-track {
             /*滚动条里面轨道*/
             border-radius: 10px;
             background: #EDEDED;
         }
-        
+
         #chatMany {
             min-width: 249px;
             min-height: 25px;
@@ -75,705 +75,606 @@
 
 
 <body>
-    <div id="block">
-        <div id="chatLog">
-            <div class="scrollbar" id="scrollbar-y"></div>
-            <div class="scrollbar" id="scrollbar-x"></div>
-        </div>
-        <div id="chat">
-            <input id="chatMany" autofocus=a utofocus value="" placeholder="/r或/a切换聊天模式">
-        </div>
+<div id="block">
+    <div id="chatLog">
+        <div class="scrollbar" id="scrollbar-y"></div>
+        <div class="scrollbar" id="scrollbar-x"></div>
     </div>
-    <span id="getUserName">{{name}}</span>
-    <script src="/libs/three.js"></script>
-    <script src="/libs/socket.io.js"></script>
-    <script src="/libs/Reflector.js"></script>
-    <script src="/libs/GLTFLoader.js"></script>
-    <script>
-        const socket = io('192.168.1.102:3003');
-    </script>
-    <script src="/libs/FirstPersonControl.js"></script>
-    <script src="/libs/PointerLockControls.js"></script>
-    <script src="/libs/RectAreaLightUniformsLib.js"></script>
+    <div id="chat">
+        <input id="chatMany" autofocus=a utofocus value="" placeholder="/r或/a切换聊天模式">
+    </div>
+</div>
+<span id="getUserName">{{name}}</span>
+<script src="/libs/three.js"></script>
+<script src="/libs/socket.io.js"></script>
+<script src="/libs/Reflector.js"></script>
+<script src="/libs/GLTFLoader.js"></script>
+<script>
+    const socket = io('192.168.1.102:3003');
+</script>
+<script src="/libs/FirstPersonControl.js"></script>
+<script src="/libs/PointerLockControls.js"></script>
+<script src="/libs/RectAreaLightUniformsLib.js"></script>
+<script src="/libs/Tool.js"></script>
 
-    <script>
-        let fpc;
-        let camera;
-        let scene;
-        let renderer;
-        let index = 0;
-        let flylights; //浮动灯光
-        let arrowHelper; //辅助箭头
-        let playerMap = new Map(); //玩家id与模型对应
-        let sceneMap = new Map(); //玩家id与场景对应
-        let noRepeat = true; //禁止持续更换场景
-        let animationId = 0; //每个场景均所使用的动画id记录量
-        let arrowFloat = 0.05; //辅助箭头浮动幅度
-        let house = new THREE.Object3D(); //博物馆主体
-        let loader = new THREE.GLTFLoader();
-        let scenes = ["", "", "", "", ""]; //五个场景
-        let getUserName = document.getElementById("getUserName");
-        const SCREEN_WIDTH = window.innerWidth,
-            SCREEN_HEIGHT = window.innerHeight;
-
-
-        //===================
-        let userName = document.getElementById("getUserName").innerText;
-        socket.emit('login', {
-            name: userName
-        });
+<script>
+    let fpc;
+    let camera;
+    let scene;
+    let renderer;
+    let index = 0;
+    let flylights; //浮动灯光
+    let arrowHelper; //辅助箭头
+    let playerMap = new Map(); //玩家id与模型对应
+    let sceneMap = new Map(); //玩家id与场景对应
+    let noRepeat = true; //禁止持续更换场景
+    let animationId = 0; //每个场景均所使用的动画id记录量
+    let arrowFloat = 0.05; //辅助箭头浮动幅度
+    let house = new THREE.Object3D(); //博物馆主体
+    let loader = new THREE.GLTFLoader();
+    let scenes = ["", "", "", "", ""]; //五个场景
+    const SCREEN_WIDTH = window.innerWidth,
+        SCREEN_HEIGHT = window.innerHeight;
 
 
-        function init() {
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0xaaaaaa);
-            scene.background = new THREE.CubeTextureLoader().setPath('resources/skybox/').load(
-                [
-                    'px.jpg',
-                    'nx.jpg',
-                    'py.jpg',
-                    'ny.jpg',
-                    'pz.jpg',
-                    'nz.jpg'
-                ]
-            );
+    //===================
+    let userName = document.getElementById("getUserName").innerText;
+    socket.emit('login', {
+        name: userName
+    });
 
-            let colors = [0xff0040, 0x80ff80, 0x00ffff, 0xcc3299, 0x236b8e, 0xffecae, 0x236b8e, 0x70db9e];
-            flylights = ["", "", "", "", "", "", "", ""];
+
+    function init() {
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xaaaaaa);
+        scene.background = new THREE.CubeTextureLoader().setPath('resources/skybox/').load(
+            [
+                'px.jpg',
+                'nx.jpg',
+                'py.jpg',
+                'ny.jpg',
+                'pz.jpg',
+                'nz.jpg'
+            ]
+        );
+
+        let colors = [0xff0040, 0x80ff80, 0x00ffff, 0xcc3299, 0x236b8e, 0xffecae, 0x236b8e, 0x70db9e];
+        flylights = ["", "", "", "", "", "", "", ""];
+        for (let i = 0; i < 8; i++) {
+            let position = getRandomPosition();
+            flylights[i] = getBulb(position[0], position[1], position[2], 2, 6, 80, colors[i]);
+        }
+        setInterval(function() {
             for (let i = 0; i < 8; i++) {
                 let position = getRandomPosition();
-                flylights[i] = getBulb(position[0], position[1], position[2], 2, 6, 80, colors[i]);
+                flylights[i].position.set(position[0], position[1], position[2]);
             }
-            setInterval(function() {
-                for (let i = 0; i < 8; i++) {
-                    let position = getRandomPosition();
-                    flylights[i].position.set(position[0], position[1], position[2]);
-                }
-            }, 3000);
+        }, 3000);
 
-            const VIEW_ANGLE = 45,
-                ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT,
-                NEAR = 0.3,
-                FAR = 5000;
-            camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-            camera.lookAt(new THREE.Vector3(0, 15, 0));
-            scene.add(camera);
+        const VIEW_ANGLE = 45,
+            ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT,
+            NEAR = 0.3,
+            FAR = 5000;
+        camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+        camera.lookAt(new THREE.Vector3(0, 15, 0));
+        scene.add(camera);
 
-            fpc = new FirstPersonControls(camera);
-            fpc.connect();
-            scene.add(fpc.yawObject);
+        fpc = new FirstPersonControls(camera);
+        fpc.connect();
+        scene.add(fpc.yawObject);
 
-            renderer = new THREE.WebGLRenderer({
-                antialias: true
-            });
-            renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-            document.body.appendChild(renderer.domElement);
+        renderer = new THREE.WebGLRenderer({
+            antialias: true
+        });
+        renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+        document.body.appendChild(renderer.domElement);
 
-            initMuseum();
-            render();
-            scenes[1] = new THREE.Object3D();
-            initSecond();
-        }
+        initMuseum();
+        render();
+        scenes[1] = new THREE.Object3D();
+        initSecond();
+    }
 
-        let clock = new THREE.Clock();
+    let clock = new THREE.Clock();
 
-        function render() {
-            fpc.update(clock.getDelta());
-            arrowHelper.position.y += arrowFloat;
-            if (arrowHelper.position.y > 11)
-                arrowFloat = -0.05;
-            if (arrowHelper.position.y < 9)
-                arrowFloat = 0.05;
-            socket.emit('player', {
-                position: fpc.yawObject.position,
-                rotation: fpc.yawObject.rotation,
-                index: index
-            });
-            renderer.render(scene, camera);
-            requestAnimationFrame(render);
-        }
+    function render() {
+        fpc.update(clock.getDelta());
+        arrowHelper.position.y += arrowFloat;
+        if (arrowHelper.position.y > 11)
+            arrowFloat = -0.05;
+        if (arrowHelper.position.y < 9)
+            arrowFloat = 0.05;
+        arrowHelper.visible = noRepeat;
+        socket.emit('player', {
+            position: fpc.yawObject.position,
+            rotation: fpc.yawObject.rotation,
+            index: index
+        });
+        renderer.render(scene, camera);
+        requestAnimationFrame(render);
+    }
 
-        function makeHelper() {
-            let dir = new THREE.Vector3(0, -10, 0);
+    function makeHelper() {
+        let dir = new THREE.Vector3(0, -10, 0);
 
-            // 规格化方向向量(转换为长度为1的向量)
-            dir.normalize();
+        // 规格化方向向量(转换为长度为1的向量)
+        dir.normalize();
 
-            // 箭头开始的点
-            let origin = new THREE.Vector3(0, 10, 0);
+        // 箭头开始的点
+        let origin = new THREE.Vector3(0, 10, 0);
 
-            // 箭头的长度。默认值为1
-            let length = 1;
+        // 箭头的长度。默认值为1
+        let length = 1;
 
-            // 用于定义颜色的十六进制值。默认值为0xffff00
-            let hex = 0xffff00;
+        // 用于定义颜色的十六进制值。默认值为0xffff00
+        let hex = 0xffff00;
 
-            // 箭头的长度。默认值为0.2 *length
-            let headLength = 8;
+        // 箭头的长度。默认值为0.2 *length
+        let headLength = 8;
 
-            // 箭头宽度的长度。默认值为0.2 * headLength。
-            let headWidth = 6;
+        // 箭头宽度的长度。默认值为0.2 * headLength。
+        let headWidth = 6;
 
-            arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex, headLength, headWidth);
-            scene.add(arrowHelper);
-        }
+        arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex, headLength, headWidth);
+        scene.add(arrowHelper);
+    }
 
-        function initMuseum() {
-            makeHelper();
-            //创建博物馆主体房子
-            let wallTextTure = new THREE.TextureLoader().load('/resources/floor/wallfloor.jpg');
-            let skyTextTure = new THREE.TextureLoader().load('/resources/floor/skyfloor.jpg');
-            for (let i = 0; i < 20; i++) {
-                let z = 75 + 200 * i;
-                let left = getWall(10, 200, 600, -805, 270, z, wallTextTure);
-                let right = getWall(10, 200, 600, 805, 270, z, wallTextTure);
-                for (let j = 0; j < 4; j++) {
-                    let top = getWall(405, 201, 10, -607.5 + 405 * j, 570, z, skyTextTure);
-                    house.add(top);
-                }
-                house.add(left);
-                house.add(right);
+    function initMuseum() {
+        makeHelper();
+        //创建博物馆主体房子
+        let wallTextTure = new THREE.TextureLoader().load('/resources/floor/wallfloor.jpg');
+        let skyTextTure = new THREE.TextureLoader().load('/resources/floor/skyfloor.jpg');
+        for (let i = 0; i < 20; i++) {
+            let z = 75 + 200 * i;
+            let left = getWall(10, 200, 600, -805, 270, z, wallTextTure);
+            let right = getWall(10, 200, 600, 805, 270, z, wallTextTure);
+            for (let j = 0; j < 4; j++) {
+                let top = getWall(405, 201, 10, -607.5 + 405 * j, 570, z, skyTextTure);
+                house.add(top);
             }
-            //添加墙体
-            let leftTextTure = new THREE.TextureLoader().load('/resources/floor/boy.jpg');
-            let rightTextTure = new THREE.TextureLoader().load('/resources/floor/sugar.jpg');
-            let forwardLeft = getWall(800, 10, 600, -400, 270, 3980, leftTextTure);
-            let forwardRight = getWall(800, 10, 600, 400, 270, 3980, rightTextTure);
-            house.add(forwardLeft);
-            house.add(forwardRight);
-            //添加浮动灯光
-            for (let i = 0; i < 8; i++) {
-                house.add(flylights[i]);
-            }
-
-            scenes[0] = new THREE.Object3D();
-            initFirst();
-            scene.add(scenes[0]);
+            house.add(left);
+            house.add(right);
+        }
+        //添加墙体
+        let leftTextTure = new THREE.TextureLoader().load('/resources/floor/boy.jpg');
+        let rightTextTure = new THREE.TextureLoader().load('/resources/floor/sugar.jpg');
+        let forwardLeft = getWall(800, 10, 600, -400, 270, 3980, leftTextTure);
+        let forwardRight = getWall(800, 10, 600, 400, 270, 3980, rightTextTure);
+        house.add(forwardLeft);
+        house.add(forwardRight);
+        //添加浮动灯光
+        for (let i = 0; i < 8; i++) {
+            house.add(flylights[i]);
         }
 
-        //博物馆外
-        function initFirst() {
-            let materialGrass = new THREE.MeshPhongMaterial({
-                map: THREE.ImageUtils.loadTexture('/resources/floor/grass.jpg')
-            });
-            let mapPlane = new THREE.PlaneGeometry(9000, 9000, 4, 4);
-            let meshPlane = new THREE.Mesh(mapPlane, materialGrass);
-            meshPlane.position.set(0, -10, 0);
-            meshPlane.receiveShadow = true;
-            meshPlane.rotation.set(-0.5 * Math.PI, 0, 0);
-            scenes[0].add(meshPlane);
-            const light = new THREE.AmbientLight(0xaaaaaa);
-            scenes[0].add(light);
+        scenes[0] = new THREE.Object3D();
+        initFirst();
+        scene.add(scenes[0]);
+    }
+
+    //博物馆外
+    function initFirst() {
+        let materialGrass = new THREE.MeshPhongMaterial({
+            map: THREE.ImageUtils.loadTexture('/resources/floor/grass.jpg')
+        });
+        let mapPlane = new THREE.PlaneGeometry(9000, 9000, 4, 4);
+        let meshPlane = new THREE.Mesh(mapPlane, materialGrass);
+        meshPlane.position.set(0, -10, 0);
+        meshPlane.receiveShadow = true;
+        meshPlane.rotation.set(-0.5 * Math.PI, 0, 0);
+        scenes[0].add(meshPlane);
+        const light = new THREE.AmbientLight(0xaaaaaa);
+        scenes[0].add(light);
+        let operationMaterial = new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture('/resources/tips/operation.jpg')});
+        let operationGeo = new THREE.CubeGeometry(175,75,175);
+        let operationMesh = new THREE.Mesh(operationGeo,operationMaterial);
+        operationMesh.position.set(-500,37,0);
+        scenes[0].add(operationMesh);
+    }
+
+    //容器厅 器
+    function initSecond() {
+        let backWard = getWall(1600, 10, 600, 0, 270, -30, getText("器"));
+        scenes[1].add(backWard);
+        let mirror = getMirror(1600, 4000, 0, 0, 1975);
+        mirror.rotateX(-Math.PI / 2);
+        scenes[1].add(mirror);
+        //添加灯泡
+        for (let i = 0; i < 20; i++) {
+            let z = 75 + 200 * i;
+            let leftBulb = getBulb(-800, 270, z, 8, 0.2, 2000, 0xffaa00);
+            let rightBulb = getBulb(780, 270, z, 8, 0.2, 2000, 0xffaa00);
+            scenes[1].add(leftBulb);
+            scenes[1].add(rightBulb);
         }
-
-        //容器厅 器
-        function initSecond() {
-            let backWard = getWall(1600, 10, 600, 0, 270, -30, getText("器"));
-            scenes[1].add(backWard);
-            let mirror = getMirror(1600, 4000, 0, 0, 1975);
-            mirror.rotateX(-Math.PI / 2);
-            scenes[1].add(mirror);
-            //添加灯泡
-            for (let i = 0; i < 20; i++) {
-                let z = 75 + 200 * i;
-                let leftBulb = getBulb(-800, 270, z, 8, 0.2, 2000, 0xffaa00);
-                let rightBulb = getBulb(780, 270, z, 8, 0.2, 2000, 0xffaa00);
-                scenes[1].add(leftBulb);
-                scenes[1].add(rightBulb);
-            }
-            //添加玻璃盒
-            for (let i = 0; i < 5; i++) {
-                let z = 375 + i * 800;
-                scenes[1].add(getGlass(400, 100, z, 200, 200, 200, 0.1, 0xffaa00));
-                scenes[1].add(getGlass(-400, 100, z, 200, 200, 200, 0.1, 0xffaa00));
-            }
-            //添加容器
-            getContainer(10, '/resources/container/bowl/scene.gltf', 400, 5, 375);
-            getContainer(0.5, '/resources/container/cup/scene.gltf', 400, 15, 1175);
-            getContainer(6, '/resources/container/egg/scene.gltf', 400, 65, 1805);
-            getContainer(5, '/resources/container/flagon/scene.gltf', 400, 20, 2775);
-            getContainer(50, '/resources/container/jar/scene.gltf', 400, 60, 3575);
-            getContainer(4, '/resources/container/kelin/scene.gltf', -400, 50, 375);
-            getContainer(40, '/resources/container/kettle/scene.gltf', -400, 50, 1175);
-            getContainer(5, '/resources/container/plate/scene.gltf', -400, 20, 1975);
-            getContainer(40, '/resources/container/pot/scene.gltf', -400, 40, 2775);
-            getContainer(80, '/resources/container/vase/scene.gltf', -400, 20, 3575);
+        //添加玻璃盒
+        for (let i = 0; i < 5; i++) {
+            let z = 375 + i * 800;
+            scenes[1].add(getGlass(400, 100, z, 200, 200, 200, 0.1, 0xffaa00));
+            scenes[1].add(getGlass(-400, 100, z, 200, 200, 200, 0.1, 0xffaa00));
         }
+        //添加容器
+        getContainer(10, '/resources/container/bowl/scene.gltf', 400, 5, 375);
+        getContainer(0.5, '/resources/container/cup/scene.gltf', 400, 15, 1175);
+        getContainer(6, '/resources/container/jar/scene.gltf', 400, 20, 1975);
+        getContainer(40, '/resources/container/flagon/scene.gltf', 400, 50, 2775);
+        getContainer(5, '/resources/container/jug/scene.gltf', 400, 20, 3575);
+        getContainer(4, '/resources/container/kelin/scene.gltf', -400, 50, 375);
+        getContainer(40, '/resources/container/kettle/scene.gltf', -400, 50, 1175);
+        getContainer(5, '/resources/container/plate/scene.gltf', -400, 20, 1975);
+        getContainer(40, '/resources/container/pot/scene.gltf', -400, 40, 2775);
+        getContainer(1, '/resources/container/vase/scene.gltf', -400, 20, 3575);
+    }
 
-        function getContainer(scale, path, x, y, z, size) {
-            loader.load(path, function(mesh) {
-                mesh.scene.scale.set(scale, scale, scale);
-                mesh.scene.position.set(x, y, z);
-                scenes[1].add(mesh.scene);
-                //照亮容器的聚光灯
-                let spotLight = new THREE.SpotLight(0xffaa00, 25, 600, Math.PI / 4);
-                spotLight.position.set(x, y + 400, z);
-                spotLight.target = mesh.scene;
-                scenes[1].add(spotLight);
-            });
+    function getContainer(scale, path, x, y, z, size) {
+        loader.load(path, function(mesh) {
+            mesh.scene.scale.set(scale, scale, scale);
+            mesh.scene.position.set(x, y, z);
+            scenes[1].add(mesh.scene);
+            //照亮容器的聚光灯
+            let spotLight = new THREE.SpotLight(0xffaa00, 25, 600, Math.PI / 4);
+            spotLight.position.set(x, y + 400, z);
+            spotLight.target = mesh.scene;
+            scenes[1].add(spotLight);
+        });
+    }
+
+    //名画厅 画
+    function initThird() {
+        let backWard = getWall(1600, 10, 600, 0, 270, -30, getText("画"));
+        scenes[2].add(backWard);
+        let mirror = getMirror(1600, 4000, 0, 0, 1975);
+        mirror.rotateX(-Math.PI / 2);
+        scenes[2].add(mirror);
+        //third_scene
+        let rotation = Math.PI / 2;
+        //添加灯光
+        let light1 = getLightBoard(0xd98719, 10, 3800, 40, -10, 245, 2075);
+        let light2 = getLightBoard(0xd98719, 10, 3800, 40, 10, 245, 2075);
+        light1.rotateY(Math.PI / 2);
+        light1.rotateX(-Math.PI * 2 / 3);
+        light2.rotateY(-Math.PI / 2);
+        light2.rotateX(-Math.PI * 2 / 3);
+        scenes[2].add(light1);
+        scenes[2].add(light2);
+        for (let i = 0; i < 5; i++) {
+            let z = 480 + 760 * i;
+            scenes[2].add(getBulb(-20, 230, z, 8, 3.2, 600, 0xd98719));
+            scenes[2].add(getBulb(0, 235, z, 8, 3.2, 600, 0xd98719));
         }
+        scenes[2].add(getBulb(400, 550, 2975, 40, 0.5, 4000, 0xd98719));
+        scenes[2].add(getBulb(400, 550, 975, 40, 0.5, 4000, 0xd98719));
+        scenes[2].add(getBulb(-400, 550, 2975, 40, 0.5, 4000, 0xd98719));
+        scenes[2].add(getBulb(-400, 550, 975, 40, 0.5, 4000, 0xd98719));
+        scenes[2].add(getWall(10, 3800, 250, 0, 125, 2075, null));
+        //添加画作
+        getPainting(3787, 150, '/resources/paintings/Qian.jpg', -6, 125, 2075, -rotation);
+        getPainting(3558, 220, '/resources/paintings/Qing.jpg', 6, 125, 2075, rotation);
+        getPainting(190, 150, '/resources/paintings/Athens.jpg', 797, 150, 375, -rotation);
+        getPainting(85, 70, '/resources/paintings/De.jpg', 797, 150, 1175, -rotation);
+        getPainting(95, 45, '/resources/paintings/Guernica.jpg', 797, 150, 1975, -rotation);
+        getPainting(60, 40, '/resources/paintings/Land.jpg', 797, 150, 2775, -rotation);
+        getPainting(145, 215, '/resources/paintings/Mona.jpg', 797, 150, 3575, -rotation);
+        getPainting(102, 68, '/resources/paintings/Gleaners.jpg', -797, 150, 375, rotation);
+        getPainting(80, 50, '/resources/paintings/Adma.jpg', -797, 150, 1175, rotation);
+        getPainting(95, 55, '/resources/paintings/Supper.jpg', -797, 150, 1975, rotation);
+        getPainting(95, 75, '/resources/paintings/Night.jpg', -797, 150, 2775, rotation);
+        getPainting(75, 55, '/resources/paintings/Sunday.jpg', -797, 150, 3575, rotation);
 
-        //名画厅 画
-        function initThird() {
-            let backWard = getWall(1600, 10, 600, 0, 270, -30, getText("画"));
-            scenes[2].add(backWard);
-            let mirror = getMirror(1600, 4000, 0, 0, 1975);
-            mirror.rotateX(-Math.PI / 2);
-            scenes[2].add(mirror);
-            //third_scene
-            let rotation = Math.PI / 2;
-            //添加灯光
-            let light1 = getLightBoard(0xd98719, 10, 3800, 40, -10, 245, 2075);
-            let light2 = getLightBoard(0xd98719, 10, 3800, 40, 10, 245, 2075);
-            light1.rotateY(Math.PI / 2);
-            light1.rotateX(-Math.PI * 2 / 3);
-            light2.rotateY(-Math.PI / 2);
-            light2.rotateX(-Math.PI * 2 / 3);
-            scenes[2].add(light1);
-            scenes[2].add(light2);
-            for (let i = 0; i < 5; i++) {
-                let z = 480 + 760 * i;
-                scenes[2].add(getBulb(-20, 230, z, 8, 3.2, 600, 0xd98719));
-                scenes[2].add(getBulb(0, 235, z, 8, 3.2, 600, 0xd98719));
-            }
-            scenes[2].add(getBulb(400, 550, 2975, 40, 0.5, 4000, 0xd98719));
-            scenes[2].add(getBulb(400, 550, 975, 40, 0.5, 4000, 0xd98719));
-            scenes[2].add(getBulb(-400, 550, 2975, 40, 0.5, 4000, 0xd98719));
-            scenes[2].add(getBulb(-400, 550, 975, 40, 0.5, 4000, 0xd98719));
-            scenes[2].add(getWall(10, 3800, 250, 0, 125, 2075, null));
-            //添加画作
-            getPainting(3787, 150, '/resources/paintings/Qian.jpg', -6, 125, 2075, -rotation);
-            getPainting(3558, 220, '/resources/paintings/Qing.jpg', 6, 125, 2075, rotation);
-            getPainting(190, 150, '/resources/paintings/Athens.jpg', 797, 150, 375, -rotation);
-            getPainting(85, 70, '/resources/paintings/De.jpg', 797, 150, 1175, -rotation);
-            getPainting(95, 45, '/resources/paintings/Guernica.jpg', 797, 150, 1975, -rotation);
-            getPainting(60, 40, '/resources/paintings/Land.jpg', 797, 150, 2775, -rotation);
-            getPainting(145, 215, '/resources/paintings/Mona.jpg', 797, 150, 3575, -rotation);
-            getPainting(102, 68, '/resources/paintings/Gleaners.jpg', -797, 150, 375, rotation);
-            getPainting(80, 50, '/resources/paintings/Adma.jpg', -797, 150, 1175, rotation);
-            getPainting(95, 55, '/resources/paintings/Supper.jpg', -797, 150, 1975, rotation);
-            getPainting(95, 75, '/resources/paintings/Night.jpg', -797, 150, 2775, rotation);
-            getPainting(75, 55, '/resources/paintings/Sunday.jpg', -797, 150, 3575, rotation);
+    }
 
+    function getPainting(width, height, path, x, y, z, rotationY) {
+        let materialPicture = new THREE.MeshPhongMaterial({
+            map: THREE.ImageUtils.loadTexture(path)
+        });
+        let picturePlane = new THREE.PlaneGeometry(width, height, 4, 4);
+        let meshPicture = new THREE.Mesh(picturePlane, materialPicture);
+        meshPicture.position.set(x, y, z);
+        meshPicture.receiveShadow = true;
+        meshPicture.rotation.set(Math.PI, rotationY, 0);
+        scenes[2].add(meshPicture);
+    }
+
+    //兵器厅 兵
+    function initForth() {
+        let backWard = getWall(1600, 10, 600, 0, 270, -30, getText("兵"));
+        scenes[3].add(backWard);
+        let mirror = getMirror(1600, 4000, 0, 0, 1975);
+        mirror.rotateX(-Math.PI / 2);
+        scenes[3].add(mirror);
+        //forth_scene
+        scenes[3].add(getBulb(0, 550, 2975, 50, 0.8, 4000, 0x4f4f2f));
+        scenes[3].add(getBulb(0, 550, 975, 50, 0.8, 4000, 0x4f4f2f));
+        scenes[3].add(new THREE.AmbientLight(0x4f4f2f, 1));
+        //添加玻璃盒
+        for(let i =0;i<5;i++){
+            let z = 375+i*800;
+            scenes[3].add(getGlass(400,100,z,200,200,200,0.2,0x4f4f2f));
+            scenes[3].add(getGlass(-400,100,z,200,200,200,0.2,0x4f4f2f));
         }
+        getWeapon(32, '/resources/weapon/axe/scene.gltf', 400, 70, 375);
+        getWeapon(0.05, '/resources/weapon/boomerang/scene.gltf', 400, 70, 1175);
+        getWeapon(1, '/resources/weapon/shield/scene.gltf', 450, 70, 1975,200);
+        getWeapon(3, '/resources/weapon/crossbow/scene.gltf', 400, 30, 2775);
+        getWeapon(12, '/resources/weapon/halberd/scene.gltf', 400, 80, 3575);
+        getWeapon(20, '/resources/weapon/knife/scene.gltf', -400, 70, 375);
+        getWeapon(12, '/resources/weapon/lance/scene.gltf', -400, 50, 1175);
+        getWeapon(40, '/resources/weapon/spear/scene.gltf', -400, 50, 1975);
+        getWeapon(0.8, '/resources/weapon/stick/scene.gltf', -420, 50, 2655);
+        getWeapon(12, '/resources/weapon/sword/scene.gltf', -400, 70, 3575);
+    }
 
-        function getPainting(width, height, path, x, y, z, rotationY) {
-            let materialPicture = new THREE.MeshPhongMaterial({
-                map: THREE.ImageUtils.loadTexture(path)
-            });
-            let picturePlane = new THREE.PlaneGeometry(width, height, 4, 4);
-            let meshPicture = new THREE.Mesh(picturePlane, materialPicture);
-            meshPicture.position.set(x, y, z);
-            meshPicture.receiveShadow = true;
-            meshPicture.rotation.set(Math.PI, rotationY, 0);
-            scenes[2].add(meshPicture);
+    function getWeapon(scale, path, x, y, z) {
+        loader.load(path, function(mesh) {
+            mesh.scene.scale.set(scale, scale, scale);
+            mesh.scene.position.set(x, y, z);
+            scenes[3].add(mesh.scene);
+        });
+    }
+
+    //饰品厅 饰
+    function initFifth() {
+        let backWard = getWall(1600, 10, 600, 0, 270, -30, getText("饰"));
+        scenes[4].add(backWard);
+        let mirror = getMirror(1600, 4000, 0, 0, 1975);
+        mirror.rotateX(-Math.PI / 2);
+        scenes[4].add(mirror);
+        //fifth_scene
+        const light = new THREE.AmbientLight(0xdddddd, 0.2);
+        scenes[4].add(light);
+        //添加灯光
+        for (let i = 0; i < 5; i++) {
+            let z = 375 + 800 * i;
+            let lightLeft = getLightBoard(0xdddddd, 40, 20, 20, 400, 20, z);
+            let lightRight = getLightBoard(0xdddddd, 40, 20, 20, -400, 20, z);
+            lightLeft.rotateX(Math.PI / 2);
+            lightRight.rotateX(Math.PI / 2);
+            scenes[4].add(lightLeft);
+            scenes[4].add(lightRight);
+            scenes[4].add((getWall(20, 20, 20, 400, 9.5, z)));
+            scenes[4].add((getWall(20, 20, 20, -400, 9.5, z)));
+            scenes[4].add((getBulb(390, 50, z, 8, 0.4, 100, 0xdddddd)));
+            scenes[4].add((getBulb(-410, 50, z, 8, 0.4, 100, 0xdddddd)));
+            scenes[4].add(getLine(-400, 51, z, 0xdddddd, -400, 590, z));
+            scenes[4].add(getLine(400, 51, z, 0xdddddd, 400, 590, z));
         }
+        //添加饰品
+        getTreasure(0.05, '/resources/treasure/ankh/scene.gltf', 400, 20, 375);
+        getTreasure(4, '/resources/treasure/bracelet/scene.gltf', 400, 24, 1175);
+        getTreasure(80, '/resources/treasure/eardrop/scene.gltf', 400, 18, 1975);
+        getTreasure(0.5, '/resources/treasure/green/scene.gltf', 380, 25, 2790);
+        getTreasure(12, '/resources/treasure/jade/scene.gltf', 400, 23, 3575);
+        getTreasure(50, '/resources/treasure/necklace/scene.gltf', -400, -55, 375);
+        getTreasure(50, '/resources/treasure/rabbit/scene.gltf', -400, 20, 1175);
+        getTreasure(2, '/resources/treasure/red/scene.gltf', -400, 25, 1975);
+        getTreasure(0.12, '/resources/treasure/ring/scene.gltf', -400, 23, 2775);
+        getTreasure(0.02, '/resources/treasure/white/scene.gltf', -400, 29, 3575);
+    }
 
-        //兵器厅 兵
-        function initForth() {
-            let backWard = getWall(1600, 10, 600, 0, 270, -30, getText("兵"));
-            scenes[3].add(backWard);
-            let mirror = getMirror(1600, 4000, 0, 0, 1975);
-            mirror.rotateX(-Math.PI / 2);
-            scenes[3].add(mirror);
-            //forth_scene
-            scenes[3].add(getBulb(0, 550, 2975, 50, 0.8, 4000, 0x4f4f2f));
-            scenes[3].add(getBulb(0, 550, 975, 50, 0.8, 4000, 0x4f4f2f));
-            scenes[3].add(new THREE.AmbientLight(0x4f4f2f, 1));
-            getWeapon(32, '/resources/weapon/axe/scene.gltf', 400, 70, 375, 200);
-            getWeapon(1, '/resources/weapon/boomerang/scene.gltf', 400, 70, 1175, 200);
-            getWeapon(48, '/resources/weapon/catapult/scene.gltf', 400, 70, 1975, 0);
-            getWeapon(3, '/resources/weapon/crossbow/scene.gltf', 400, 70, 2775, 200);
-            getWeapon(12, '/resources/weapon/halberd/scene.gltf', 400, 70, 3575, 200);
-            getWeapon(20, '/resources/weapon/knife/scene.gltf', -400, 70, 375, 200);
-            getWeapon(72, '/resources/weapon/lance/scene.gltf', -400, 70, 1175, 200);
-            getWeapon(40, '/resources/weapon/spear/scene.gltf', -400, 70, 1975, 200);
-            getWeapon(1, '/resources/weapon/stick/scene.gltf', -400, 70, 2775, 0);
-            getWeapon(12, '/resources/weapon/sword/scene.gltf', -400, 70, 3575, 200);
-        }
+    function getTreasure(scale, path, x, y, z) {
+        loader.load(path, function(mesh) {
+            mesh.scene.scale.set(scale, scale, scale);
+            mesh.scene.position.set(x, y, z);
+            scenes[4].add(mesh.scene);
+        });
+    }
 
-        function getWeapon(scale, path, x, y, z, size) {
-            loader.load(path, function(mesh) {
-                mesh.scene.scale.set(scale, scale, scale);
-                mesh.scene.position.set(x, y, z);
-                scenes[3].add(mesh.scene);
-                scenes[3].add(getGlass(x, 100, z, size, size, size, 0.2, 0x4f4f2f));
-            });
-        }
-
-        //饰品厅 饰
-        function initFifth() {
-            let backWard = getWall(1600, 10, 600, 0, 270, -30, getText("饰"));
-            scenes[4].add(backWard);
-            let mirror = getMirror(1600, 4000, 0, 0, 1975);
-            mirror.rotateX(-Math.PI / 2);
-            scenes[4].add(mirror);
-            //fifth_scene
-            const light = new THREE.AmbientLight(0xdddddd, 0.2);
-            scenes[4].add(light);
-            //添加灯光
-            for (let i = 0; i < 5; i++) {
-                let z = 375 + 800 * i;
-                let lightLeft = getLightBoard(0xdddddd, 40, 20, 20, 400, 20, z);
-                let lightRight = getLightBoard(0xdddddd, 40, 20, 20, -400, 20, z);
-                lightLeft.rotateX(Math.PI / 2);
-                lightRight.rotateX(Math.PI / 2);
-                scenes[4].add(lightLeft);
-                scenes[4].add(lightRight);
-                scenes[4].add((getWall(20, 20, 20, 400, 9.5, z)));
-                scenes[4].add((getWall(20, 20, 20, -400, 9.5, z)));
-                scenes[4].add((getBulb(390, 50, z, 8, 0.4, 100, 0xdddddd)));
-                scenes[4].add((getBulb(-410, 50, z, 8, 0.4, 100, 0xdddddd)));
-                scenes[4].add(getLine(-400, 51, z, 0xdddddd, -400, 590, z));
-                scenes[4].add(getLine(400, 51, z, 0xdddddd, 400, 590, z));
-            }
-            //添加饰品
-            getTreasure(0.05, '/resources/treasure/ankh/scene.gltf', 400, 20, 375);
-            getTreasure(4, '/resources/treasure/bracelet/scene.gltf', 400, 24, 1175);
-            getTreasure(80, '/resources/treasure/eardrop/scene.gltf', 400, 18, 1975);
-            getTreasure(0.5, '/resources/treasure/green/scene.gltf', 380, 25, 2790);
-            getTreasure(12, '/resources/treasure/jade/scene.gltf', 400, 23, 3575);
-            getTreasure(50, '/resources/treasure/necklace/scene.gltf', -400, -55, 375);
-            getTreasure(50, '/resources/treasure/rabbit/scene.gltf', -400, 20, 1175);
-            getTreasure(2, '/resources/treasure/red/scene.gltf', -400, 25, 1975);
-            getTreasure(0.12, '/resources/treasure/ring/scene.gltf', -400, 23, 2775);
-            getTreasure(0.02, '/resources/treasure/white/scene.gltf', -400, 19, 3575);
-        }
-
-        function getTreasure(scale, path, x, y, z) {
-            loader.load(path, function(mesh) {
-                mesh.scene.scale.set(scale, scale, scale);
-                mesh.scene.position.set(x, y, z);
-                scenes[4].add(mesh.scene);
-                // scenes[4].add(getBulb(x, 30, z, 0.5, 40, 200, 0xdddddd));
-                // scenes[4].add(getBulb(x-20, 50, z, 0.5, 40, 200, 0xdddddd));
-            });
-        }
-
-        //回退
-        function back() {
-            cancelAnimationFrame(animationId);
-            if (index === 0)
-                return;
-            clearModel();
-            scene.remove(scenes[index]);
-            index--;
-            //判断前一场景是否初始化
-            if (scenes[index] === null) {
-                switch (index) {
-                    case 0:
-                        scenes[0] = new THREE.Object3D();
-                        initFirst();
-                        //离开博物馆，移除房子
-                        scene.remove(house);
-                        break;
-                    case 1:
-                        scenes[1] = new THREE.Object3D();
-                        initSecond();
-                        break;
-                    case 2:
-                        scenes[1] = new THREE.Object3D();
-                        initThird();
-                        break;
-                    case 3:
-                        scenes[2] = new THREE.Object3D();
-                        initForth();
-                        break;
-                }
-            }
-            //更换场景，初始化下一场景
-            scene.add(scenes[index]);
-            changeRole(index + 1, index);
+    //回退
+    function back() {
+        cancelAnimationFrame(animationId);
+        if (index === 0)
+            return;
+        clearModel();
+        scene.remove(scenes[index]);
+        index--;
+        //判断前一场景是否初始化
+        if (scenes[index] === null) {
             switch (index) {
                 case 0:
-                    scenes[1] = new THREE.Object3D();
-                    initSecond();
+                    scenes[0] = new THREE.Object3D();
+                    initFirst();
                     //离开博物馆，移除房子
                     scene.remove(house);
                     break;
                 case 1:
-                    scenes[0] = new THREE.Object3D();
-                    initFirst();
-                    break;
-                case 2:
                     scenes[1] = new THREE.Object3D();
                     initSecond();
                     break;
-                case 3:
-                    scenes[2] = new THREE.Object3D();
-                    initThird();
-                    break;
-            }
-        }
-
-        function forward() {
-            cancelAnimationFrame(animationId);
-            if (index === 4)
-                return;
-            clearModel();
-            scene.remove(scenes[index]);
-
-            index++;
-            //更换场景，初始化下一场景
-            scene.add(scenes[index]);
-            changeRole(index - 1, index);
-            switch (index) {
-                case 1:
-                    scenes[2] = new THREE.Object3D();
-                    initThird();
-                    //进入博物馆，添加房子
-                    scene.add(house);
-                    break;
                 case 2:
-                    scenes[3] = new THREE.Object3D();
-                    initForth();
+                    scenes[1] = new THREE.Object3D();
+                    initThird();
                     break;
                 case 3:
-                    scenes[4] = new THREE.Object3D();
-                    initFifth();
-                    break;
-                case 4:
-                    scenes[3] = new THREE.Object3D();
+                    scenes[2] = new THREE.Object3D();
                     initForth();
                     break;
             }
         }
+        //更换场景，初始化下一场景
+        scene.add(scenes[index]);
+        changeRole(index + 1, index);
+        switch (index) {
+            case 0:
+                scenes[1] = new THREE.Object3D();
+                initSecond();
+                //离开博物馆，移除房子
+                scene.remove(house);
+                break;
+            case 1:
+                scenes[0] = new THREE.Object3D();
+                initFirst();
+                break;
+            case 2:
+                scenes[1] = new THREE.Object3D();
+                initSecond();
+                break;
+            case 3:
+                scenes[2] = new THREE.Object3D();
+                initThird();
+                break;
+        }
+    }
 
+    function forward() {
+        cancelAnimationFrame(animationId);
+        if (index === 4)
+            return;
+        clearModel();
+        scene.remove(scenes[index]);
 
-        //制作镜子
-        function getMirror(width, length, x, y, z) {
-            var geometry = new THREE.PlaneBufferGeometry(width, length);
-            var verticalMirror = new THREE.Reflector(geometry, {
-                clipBias: 0.003,
-                textureWidth: window.innerWidth * window.devicePixelRatio,
-                textureHeight: window.innerHeight * window.devicePixelRatio,
-                color: 0x889999,
-                recursion: 1
-            });
-            verticalMirror.position.x = x;
-            verticalMirror.position.y = y;
-            verticalMirror.position.z = z;
-            return verticalMirror;
+        index++;
+        //更换场景，初始化下一场景
+        scene.add(scenes[index]);
+        changeRole(index - 1, index);
+        switch (index) {
+            case 1:
+                scenes[2] = new THREE.Object3D();
+                initThird();
+                //进入博物馆，添加房子
+                scene.add(house);
+                break;
+            case 2:
+                scenes[3] = new THREE.Object3D();
+                initForth();
+                break;
+            case 3:
+                scenes[4] = new THREE.Object3D();
+                initFifth();
+                break;
+            case 4:
+                scenes[3] = new THREE.Object3D();
+                initForth();
+                break;
         }
-        //制作墙体
-        function getWall(width, length, height, x, y, z, path) {
-            const wall = new THREE.CubeGeometry(width, height, length);
-            const material = new THREE.MeshLambertMaterial({
-                map: path
-            });
-            let mesh = new THREE.Mesh(wall, material);
-            mesh.position.x = x;
-            mesh.position.y = y;
-            mesh.position.z = z;
-            return mesh;
-        }
-        //制作灯泡
-        function getBulb(x, y, z, size, intensity, distance, color) {
-            var sphere = new THREE.SphereBufferGeometry(size, 16, 8);
-            let lightBulb = new THREE.PointLight(color, intensity, distance);
-            lightBulb.add(new THREE.Mesh(sphere, new THREE.MeshBasicMaterial({
-                color: color
-            })));
-            lightBulb.position.set(x + 10, y + 4, z);
-            return lightBulb;
-        }
-        //制作吊线
-        function getLine(x1, y1, z1, color, x2, y2, z2) {
-            let lineGeometry = new THREE.Geometry(); //生成几何体
-            lineGeometry.vertices.push(new THREE.Vector3(x1, y1, z1)); //线段的两个顶点
-            lineGeometry.vertices.push(new THREE.Vector3(x2, y2, z2));
-            let line = new THREE.Line(lineGeometry, new THREE.LineDashedMaterial({
-                color: color, //线段的颜色
-                dashSize: 1, //短划线的大小
-                gapSize: 3 //短划线之间的距离
-            }));
-            line.computeLineDistances(); //线段显示为虚线
-            return line;
-        }
-        //制作平板灯
-        function getLightBoard(color, intensity, width, height, x, y, z) {
+    }
 
-            let rectLight = new THREE.RectAreaLight(color, intensity, width, height);
-            rectLight.position.set(x, y, z);
-
-            let rectLightMesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(), new THREE.MeshBasicMaterial({
-                side: THREE.BackSide
-            }));
-            rectLightMesh.scale.x = rectLight.width;
-            rectLightMesh.scale.y = rectLight.height;
-            rectLight.add(rectLightMesh);
-
-            let rectLightMeshBack = new THREE.Mesh(new THREE.PlaneBufferGeometry(), new THREE.MeshBasicMaterial({
-                color: 0x080808
-            }));
-            rectLightMesh.add(rectLightMeshBack);
-            return rectLight;
-        }
-        //制作文字贴图
-        function getText(text) {
-            let width = 1600,
-                height = 600;
-            let canvas = document.createElement('canvas');
-            canvas.width = width;
-            canvas.height = height;
-            let ctx = canvas.getContext('2d');
-            ctx.fillStyle = '#C3C3C3';
-            ctx.fillRect(0, 0, width, height);
-            ctx.font = 150 + 'px " bold';
-            ctx.fillStyle = 'black';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(text, width / 2, height / 2);
-            return new THREE.CanvasTexture(canvas);
-        }
-        //制作玻璃
-        function getGlass(x, y, z, width, height, length, opacity, color) {
-            let galssEnity = new THREE.BoxGeometry(width, height, length);
-            let meshMaterial = new THREE.MeshBasicMaterial({
-                color: color,
-                opacity: opacity,
-                transparent: true
-            });
-            let glass = new THREE.Mesh(galssEnity, meshMaterial);
-            glass.position.set(x, y, z);
-            return glass;
-        }
-        //产生随机位置
-        function getRandomPosition() {
-            let position = [0, 0, 0];
-            position[0] = Math.random() * 1580 - 790;
-            position[1] = Math.random() * 580 + 10;
-            position[2] = Math.random() * 3980 - 15;
-            return position;
-        }
-
-        //清理不用的场景
-        function clearModel() {
-            // 判断类型
-            if (scenes[index] instanceof THREE.Scene) {
-                let children = scenes[index].children;
-                for (let i = 0; i < children.length; i++) {
-                    deleteGroup(children[i]);
-                }
-            } else {
-                deleteGroup(scenes[index]);
+    //清理不用的场景
+    function clearModel() {
+        // 判断类型
+        if (scenes[index] instanceof THREE.Scene) {
+            let children = scenes[index].children;
+            for (let i = 0; i < children.length; i++) {
+                deleteGroup(children[i]);
             }
-            scenes[index] = null;
-            scene.remove(scenes[index]);
+        } else {
+            deleteGroup(scenes[index]);
         }
+        scenes[index] = null;
+        scene.remove(scenes[index]);
+    }
 
-        // 删除group，释放内存
-        function deleteGroup(group) {
-            if (!group) return;
-            // 删除掉所有的模型组内的mesh
-            group.traverse(function(item) {
-                if (item instanceof THREE.Mesh) {
-                    item.geometry.dispose(); // 删除几何体
-                    item.material.dispose(); // 删除材质
-                }
-            });
-            scene.remove(group);
-            group = null;
-        }
-
-        function changeRole(oldIndex, newIndex) {
-            for (let id of playerMap) {
-                if (sceneMap.get(id[0]) === oldIndex) {
-                    scene.remove(playerMap.get(id[0]));
-                }
-                if (sceneMap.get(id) === newIndex)
-                    scene.add(playerMap.get(id[0]));
-            }
-        }
-
-        //用户数据和响应
-        socket.on('player', data => {
-            if (playerMap.has(data.socketid)) {
-                let model = playerMap.get(data.socketid);
-                if (model === null) {
-                    return;
-                }
-                model.position.set(data.position.x, data.position.y, data.position.z);
-                model.rotation.set(data.rotation._x, data.rotation._y + Math.PI / 2, data.rotation._z);
-                if (data.index !== sceneMap.get(data.socketid)) {
-                    if (sceneMap.get(data.socketid) === index)
-                        scene.remove(playerMap.get(data.socketid));
-                    sceneMap.set(data.socketid, data.index);
-                    if (data.index === index)
-                        scene.add(playerMap.get(data.socketid));
-                }
-            } else {
-                playerMap.set(data.socketid, null);
-                loader.load("/resources/role/duck.glb", (mesh) => {
-                    mesh.scene.scale.set(10, 10, 10);
-                    playerMap.set(data.socketid, mesh.scene);
-                    sceneMap.set(data.socketid, data.index);
-                    if (data.index === index) {
-                        scene.add(playerMap.get(data.socketid));
-
-                    }
-                });
+    // 删除group，释放内存
+    function deleteGroup(group) {
+        if (!group) return;
+        // 删除掉所有的模型组内的mesh
+        group.traverse(function(item) {
+            if (item instanceof THREE.Mesh) {
+                item.geometry.dispose(); // 删除几何体
+                item.material.dispose(); // 删除材质
             }
         });
-        socket.on('offline', data => {
-            if (sceneMap.get(data.socketid) === index)
-                scene.remove(playerMap.get(data.socketid));
-            playerMap.delete(data.socketid);
-            sceneMap.delete(data.socketid);
-        });
-        //xwl 多人聊天
-        socket.on('chatMany', data => {
-            let chatP = document.createElement("p");
-            chatP.style.maxWidth = "250px";
-            chatP.innerHTML = data.name + ":" + (data.message || "");
-            chatLog.appendChild(chatP);
-            if (chatLog.lastChild) {
-                chatLog.lastChild.scrollIntoView();
-            }
-        });
-        socket.on('chatOne', data => {
-            let chatP = document.createElement("p");
-            chatP.style.maxWidth = "250px";
-            chatP.innerHTML = data.from + " ：" + (data.message || "");
-            chatLog.appendChild(chatP);
-            if (chatLog.lastChild) {
-                chatLog.lastChild.scrollIntoView();
-            }
-        });
-        window.addEventListener("resize", function() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
+        scene.remove(group);
+        group = null;
+    }
 
-        const KEY_B = 66;
-        const KEY_N = 78;
-        document.addEventListener("keydown", function(e) {
+    function changeRole(oldIndex, newIndex) {
+        for (let id of playerMap) {
+            if (sceneMap.get(id[0]) === oldIndex) {
+                scene.remove(playerMap.get(id[0]));
+            }
+            if (sceneMap.get(id) === newIndex)
+                scene.add(playerMap.get(id[0]));
+        }
+    }
 
-            if (fpc.canChat)
+    //用户数据和响应
+    socket.on('player', data => {
+        if (playerMap.has(data.socketid)) {
+            let model = playerMap.get(data.socketid);
+            if (model === null) {
                 return;
-            let distance = Math.sqrt(Math.pow(fpc.yawObject.position.x, 2) + Math.pow(fpc.yawObject.position.z, 2));
-            if (distance > 25) {
-                noRepeat = true;
             }
-            switch (e.keyCode) {
-                case KEY_B:
-                    if (distance < 25 && noRepeat) {
-                        console.log('enter');
-                        noRepeat = false;
-                        back();
-                    }
-                    break;
-                case KEY_N:
-                    if (distance < 25 && noRepeat) {
-                        noRepeat = false;
-                        forward();
-                    }
-                    break;
+            model.position.set(data.position.x, data.position.y, data.position.z);
+            model.rotation.set(data.rotation._x, data.rotation._y + Math.PI / 2, data.rotation._z);
+            if (data.index !== sceneMap.get(data.socketid)) {
+                if (sceneMap.get(data.socketid) === index)
+                    scene.remove(playerMap.get(data.socketid));
+                sceneMap.set(data.socketid, data.index);
+                if (data.index === index)
+                    scene.add(playerMap.get(data.socketid));
             }
-        })
-        init();
-    </script>
+        } else {
+            playerMap.set(data.socketid, null);
+            loader.load("/resources/role/duck.glb", (mesh) => {
+                mesh.scene.scale.set(10, 10, 10);
+                playerMap.set(data.socketid, mesh.scene);
+                sceneMap.set(data.socketid, data.index);
+                if (data.index === index) {
+                    scene.add(playerMap.get(data.socketid));
+
+                }
+            });
+        }
+    });
+    socket.on('offline', data => {
+        if (sceneMap.get(data.socketid) === index)
+            scene.remove(playerMap.get(data.socketid));
+        playerMap.delete(data.socketid);
+        sceneMap.delete(data.socketid);
+    });
+    //xwl 多人聊天
+    socket.on('chatMany', data => {
+        let chatP = document.createElement("p");
+        chatP.style.maxWidth = "250px";
+        chatP.innerHTML = data.name + ":" + (data.message || "");
+        chatLog.appendChild(chatP);
+        if (chatLog.lastChild) {
+            chatLog.lastChild.scrollIntoView();
+        }
+    });
+    socket.on('chatOne', data => {
+        let chatP = document.createElement("p");
+        chatP.style.maxWidth = "250px";
+        chatP.innerHTML = data.from + " ：" + (data.message || "");
+        chatLog.appendChild(chatP);
+        if (chatLog.lastChild) {
+            chatLog.lastChild.scrollIntoView();
+        }
+    });
+    window.addEventListener("resize", function() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    const KEY_B = 66;
+    const KEY_N = 78;
+    document.addEventListener("keydown", function(e) {
+
+        if (fpc.canChat)
+            return;
+        let distance = Math.sqrt(Math.pow(fpc.yawObject.position.x, 2) + Math.pow(fpc.yawObject.position.z, 2));
+        if (distance > 25) {
+            noRepeat = true;
+        }
+        switch (e.keyCode) {
+            case KEY_B:
+                if (distance < 25 && noRepeat) {
+                    console.log('enter');
+                    noRepeat = false;
+                    back();
+                }
+                break;
+            case KEY_N:
+                if (distance < 25 && noRepeat) {
+                    noRepeat = false;
+                    forward();
+                }
+                break;
+        }
+    })
+    init();
+</script>
 </body>
 
 </html>
