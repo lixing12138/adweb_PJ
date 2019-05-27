@@ -7,13 +7,24 @@ const KEY_ENTER = 13;
 
 const KTY_Space = 32;
 //xwl 聊天
+let showing;
 let chat = document.getElementById("chat");
 let chatMany = document.getElementById("chatMany");
 let chatLog = document.getElementById("chatLog");
 
 
 class FirstPersonControls {
-    constructor(camera, domElement) {
+    constructor(camera,scene, domElement) {
+        //=========xiong
+        //声明射线
+        this.foreRaycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(), 0, 30);
+        this.rightRaycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(), 0, 30);
+        this.leftRaycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(), 0, 30);
+        this.backRaycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(), 0, 30);
+
+        //==========xiong
+
+        this.scene = scene;
         this.domElement = domElement || document.body;
         this.isLocked = false;
         this.camera = camera;
@@ -23,16 +34,15 @@ class FirstPersonControls {
         this.moveBackward = false;
         this.moveLeft = false;
         this.moveRight = false;
-        this.moveUp = false;
 
         this.canChat = false;
         this.chatModel = true; //true ：全体聊天  ; false : 私聊
 
         this.clickHandler = this.domElement.requestPointerLock;
         this.onKeyDown = function(event) {
-            if(event.shiftKey)
-                this.speed = 300;
             if (this.canChat != true) {
+                if(event.shiftKey)
+                    this.speed = 300;
                 switch (event.keyCode) {
                     case KEY_W:
                         this.moveForward = true;
@@ -70,7 +80,7 @@ class FirstPersonControls {
                 case KTY_Space:
                     this.moveUp = true;
                     break;
-                    //xwl 多人聊天
+                //xwl 多人聊天
                 case KEY_ENTER:
                     if (this.canChat) {
                         if (chatMany.value === "/r" || chatMany.value === "/R") {
@@ -84,7 +94,10 @@ class FirstPersonControls {
                             chatMany.placeholder = "/r或/a切换聊天模式";
                             break;
                         } else {
-                            chatLog.scrollIntoView();
+                            if (chatLog.children.length > 2) {
+                                chatLog.lastChild.scrollIntoView();
+                            }
+
                             let chatP = document.createElement("p");
                             chatP.style.maxWidth = "250px";
                             if (chatMany.value) { //聊天框内有内容
@@ -105,21 +118,25 @@ class FirstPersonControls {
                             }
                             this.canChat = false;
                             chat.style.display = "none";
-                            this.domElement.requestPointerLock();
-                            this.domElement.addEventListener('click', this.domElement.requestPointerLock);
-                            if (chatLog.lastChild) {
+                            if(!showing){
+                                this.domElement.requestPointerLock();
+                                this.domElement.addEventListener('click', this.domElement.requestPointerLock);
+                            }
+                            if (chatLog.children.length > 2) {
                                 chatLog.lastChild.scrollIntoView();
                             }
                         }
                     } else {
-                        chatLog.scrollIntoView();
+                        if (chatLog.children.length > 2) {
+                            chatLog.lastChild.scrollIntoView();
+                        }
                         document.exitPointerLock();
                         chat.style.display = "block";
                         chatMany.focus();
                         chatMany.value = "";
                         this.domElement.removeEventListener('click', this.domElement.requestPointerLock);
                         this.canChat = true;
-                        if (chatLog.lastChild) {
+                        if (chatLog.children.length > 2) {
                             chatLog.lastChild.scrollIntoView();
                         }
                     }
@@ -166,29 +183,82 @@ class FirstPersonControls {
     }
 
     update(delta) {
-        // 移动速度
-        const moveSpeed = 100;
 
         // 确定移动方向
         let direction = new THREE.Vector3();
-        direction.x = Number(this.moveRight) - Number(this.moveLeft);
-        direction.z = Number(this.moveBackward) - Number(this.moveForward);
+        direction.z = Number( this.moveBackward )- Number( this.moveForward )  ;
+        direction.x = Number( this.moveRight )- Number( this.moveLeft ) ;
         direction.y = 0;
 
         // 移动方向向量归一化，使得实际移动的速度大小不受方向影响
-        if (direction.x !== 0 || direction.z !== 0) {
-            direction.normalize();
+        direction.normalize();
+        //=====xiong
+        let rotation = new THREE.Vector3();//相机朝向
+        rotation.copy(this.yawObject.getWorldDirection( new THREE.Vector3()).multiply(new THREE.Vector3(1, 0, 1)));
+        //判断键盘按下的方向
+        let m = new THREE.Matrix4();
+        if(direction.z > 0){
+            if(direction.x > 0){
+                m.makeRotationY(Math.PI/4);
+            } else if(direction.x < 0){
+                m.makeRotationY(-Math.PI/4);
+            } else{
+                m.makeRotationY(0);
+            }
+        } else if(direction.z < 0){
+            if(direction.x > 0){
+                m.makeRotationY(Math.PI/4*3);
+            } else if(direction.x < 0){
+                m.makeRotationY(-Math.PI/4*3);
+            } else{
+                m.makeRotationY(Math.PI);
+            }
+        } else{
+            if(direction.x > 0){
+                m.makeRotationY(Math.PI/2);
+            } else if(direction.x < 0){
+                m.makeRotationY(-Math.PI/2);
+            }
         }
+        //给向量使用变换矩阵
+        rotation.applyMatrix4(m);
+
+
+        this.foreRaycaster.set( this.yawObject.position , rotation );
+        rotation.X+=Math.PI/2;
+        this.leftRaycaster.set( this.yawObject.position , rotation );
+        rotation.X+=Math.PI/2;
+
+        this.rightRaycaster.set( this.yawObject.position , rotation );
+        rotation.X+=Math.PI/2;
+
+        this.backRaycaster.set( this.yawObject.position , rotation );
+        let horizontalIntersections = this.foreRaycaster.intersectObjects( this.scene.children, true);
+        let horizontalIntersections1 = this.foreRaycaster.intersectObjects( this.scene.children, true);
+        let horizontalIntersections2 = this.foreRaycaster.intersectObjects( this.scene.children, true);
+        let horizontalIntersections3 = this.foreRaycaster.intersectObjects( this.scene.children, true);
+
+        let horOnObject = horizontalIntersections.length > 0 || horizontalIntersections1.lenght > 0 || horizontalIntersections2.length > 0||
+            horizontalIntersections3.length > 0;//是否产生碰撞
+
 
         // 移动距离等于速度乘上间隔时间delta
-        if (this.moveForward || this.moveBackward) {
-            this.yawObject.translateZ(moveSpeed * direction.z * delta);
+        if (!horOnObject) {
+            this.yawObject.translateZ(this.speed * direction.z * delta);
+            this.yawObject.translateX(this.speed * direction.x * delta);
         }
-        if (this.moveLeft || this.moveRight) {
-            this.yawObject.translateX(moveSpeed * direction.x * delta);
-        }
+
+        //=====xiong
         this.speed = 150;
     };
+
+    removeLock(){
+        this.domElement.removeEventListener('click', this.clickHandler);
+    }
+
+    addLock(){
+        this.domElement.addEventListener('click', this.clickHandler);
+    }
 
     connect() {
         //xwl 多人聊天

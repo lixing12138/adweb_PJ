@@ -106,3 +106,16 @@ function getRandomPosition() {
     position[2] = Math.random() * 3980 - 15;
     return position;
 }
+// 删除group，释放内存
+function deleteGroup(group) {
+    if (!group) return;
+    // 删除掉所有的模型组内的mesh
+    group.traverse(function(item) {
+        if (item instanceof THREE.Mesh) {
+            item.geometry.dispose(); // 删除几何体
+            item.material.dispose(); // 删除材质
+        }
+    });
+    scene.remove(group);
+    group = null;
+}
