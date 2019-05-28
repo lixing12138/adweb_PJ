@@ -52,7 +52,7 @@ io.on('connection', function(socket) {
     //login事件
     socket.on('login', function(data) {
         userMap.set(socket.id, data.name);
-        socket.broadcast.emit('login', { userMap });
+        socket.broadcast.emit('login', { socketid: socket.id, name: data.name });
         console.log(data.name);
     });
     //一对一聊天
