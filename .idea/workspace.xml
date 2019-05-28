@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6ec4bab4-7a8a-4302-b62b-18371351d8b0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/static/libs/Showcase.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/libs/container.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/module/config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/libs/FirstPersonControl.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/libs/FirstPersonControl.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/libs/Tool.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/libs/Tool.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/resources/role/duck.glb" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/views/scene.html" beforeDir="false" afterPath="$PROJECT_DIR$/views/scene.html" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -21,51 +18,32 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/scene.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="331">
-              <caret line="445" column="56" selection-start-line="445" selection-start-column="56" selection-end-line="445" selection-end-column="56" />
-              <folding>
-                <element signature="e#202#263#0" />
-                <element signature="e#504#722#0" />
-              </folding>
+            <state relative-caret-position="292">
+              <caret line="596" column="66" selection-start-line="596" selection-start-column="66" selection-end-line="596" selection-end-column="66" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/module/config.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="25">
-              <caret line="1" column="26" selection-start-line="1" selection-start-column="26" selection-end-line="1" selection-end-column="26" />
-            </state>
-          </provider>
+        <entry file="file://$PROJECT_DIR$/static/FirstPersonControl.js">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/static/libs/Showcase.js">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/scene.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="17" column="73" selection-start-line="17" selection-start-column="73" selection-end-line="17" selection-end-column="73" />
-            </state>
+            <state relative-caret-position="-15830" />
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/static/libs/FirstPersonControl.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="239">
-              <caret line="226" column="69" lean-forward="true" selection-start-line="226" selection-start-column="69" selection-end-line="226" selection-end-column="69" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/static/libs/Tool.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="256">
-              <caret line="106" column="18" selection-start-line="106" selection-start-column="18" selection-end-line="106" selection-end-column="18" />
+            <state relative-caret-position="389">
+              <caret line="229" column="16" selection-start-line="229" selection-start-column="16" selection-end-line="229" selection-end-column="16" />
             </state>
           </provider>
         </entry>
@@ -106,16 +84,18 @@
       <list>
         <option value="$PROJECT_DIR$/static/libs/Tool.js" />
         <option value="$PROJECT_DIR$/module/config.js" />
+        <option value="$PROJECT_DIR$/../../FirstPersonControl(3).js" />
         <option value="$PROJECT_DIR$/static/libs/FirstPersonControl.js" />
+        <option value="$PROJECT_DIR$/../../scene.html" />
         <option value="$PROJECT_DIR$/views/scene.html" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="555" />
-    <option name="y" value="87" />
-    <option name="width" value="1287" />
-    <option name="height" value="1040" />
+    <option name="x" value="680" />
+    <option name="y" value="40" />
+    <option name="width" value="1140" />
+    <option name="height" value="965" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -159,7 +139,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../作业/高级Web/lab2" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -193,18 +173,19 @@
       <updated>1558508802989</updated>
       <workItem from="1558508804779" duration="255000" />
       <workItem from="1558601706564" duration="6374000" />
-      <workItem from="1558962990972" duration="4914000" />
+      <workItem from="1558962990972" duration="5123000" />
+      <workItem from="1559042102418" duration="3686000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="11543000" />
+    <option name="totallyTimeSpent" value="15438000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14068693" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21928665" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -231,10 +212,10 @@
     <entry file="file://$PROJECT_DIR$/static/libs/container.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/libs/Tool.js">
+    <entry file="file://$PROJECT_DIR$/module/config.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="106" column="18" selection-start-line="106" selection-start-column="18" selection-end-line="106" selection-end-column="18" />
+        <state relative-caret-position="25">
+          <caret line="1" column="26" selection-start-line="1" selection-start-column="26" selection-end-line="1" selection-end-column="26" />
         </state>
       </provider>
     </entry>
@@ -245,29 +226,54 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/module/config.js">
+    <entry file="file://$PROJECT_DIR$/static/libs/Tool.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2650">
+          <caret line="106" column="18" selection-start-line="106" selection-start-column="18" selection-end-line="106" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/libs/three.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="25">
-          <caret line="1" column="26" selection-start-line="1" selection-start-column="26" selection-end-line="1" selection-end-column="26" />
+          <caret line="43895" column="8" selection-start-line="43895" selection-start-column="8" selection-end-line="43895" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/static/libs/FirstPersonControl.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="239">
-          <caret line="226" column="69" lean-forward="true" selection-start-line="226" selection-start-column="69" selection-end-line="226" selection-end-column="69" />
+        <state relative-caret-position="389">
+          <caret line="229" column="16" selection-start-line="229" selection-start-column="16" selection-end-line="229" selection-end-column="16" />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../../FirstPersonControl(3).js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-469">
+          <caret line="229" column="16" selection-start-line="229" selection-start-column="16" selection-end-line="229" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../scene.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="188" column="8" selection-start-line="188" selection-start-column="8" selection-end-line="188" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/FirstPersonControl.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/views/scene.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="331">
-          <caret line="445" column="56" selection-start-line="445" selection-start-column="56" selection-end-line="445" selection-end-column="56" />
-          <folding>
-            <element signature="e#202#263#0" />
-            <element signature="e#504#722#0" />
-          </folding>
+        <state relative-caret-position="292">
+          <caret line="596" column="66" selection-start-line="596" selection-start-column="66" selection-end-line="596" selection-end-column="66" />
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scene.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-15830" />
       </provider>
     </entry>
   </component>

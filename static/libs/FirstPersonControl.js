@@ -83,48 +83,36 @@ class FirstPersonControls {
                 //xwl 多人聊天
                 case KEY_ENTER:
                     if (this.canChat) {
-                        if (chatMany.value === "/r" || chatMany.value === "/R") {
-                            this.chatModel = false;
-                            chatMany.value = "";
-                            chatMany.placeholder = "私聊e.g.  toUsr: hello";
-                            break;
-                        } else if (chatMany.value === "/a" || chatMany.value === "/A") {
-                            this.chatModel = true;
-                            chatMany.value = "";
-                            chatMany.placeholder = "/r或/a切换聊天模式";
-                            break;
-                        } else {
-                            if (chatLog.children.length > 2) {
-                                chatLog.lastChild.scrollIntoView();
+                        let chatTarget = document.getElementById("userList").value;
+                        if (chatTarget === "all") {
+                            this.chatModel = true ;
+                        }else {
+                            this.chatModel = false ;
+                        }
+                        let chatP = document.createElement("p");
+                        chatP.style.maxWidth = "250px";
+                        if (chatMany.value) { //聊天框内有内容
+                            if (this.chatModel) { //全体聊天
+                                chatP.innerHTML = "我：" + (chatMany.value || "");
+                                let userName = document.getElementById("getUserName").text; //获取用户名
+                                chatLog.appendChild(chatP);
+                                socket.emit('chatMany', { name: userName, message: chatMany.value });
+                            } else { //私聊
+                                chatP.innerHTML = "To " +chatTarget+ chatMany.value ;
+                                chatLog.appendChild(chatP);
+                                let userName = document.getElementById("getUserName").text; //获取用户名
+                                let message = chatMany.value;
+                                socket.emit('chatOne', { from: userName, to: chatTarget, message: message }); //发送消息给固定用户
                             }
-
-                            let chatP = document.createElement("p");
-                            chatP.style.maxWidth = "250px";
-                            if (chatMany.value) { //聊天框内有内容
-                                if (this.chatModel) { //全体聊天
-                                    chatP.innerHTML = "我：" + (chatMany.value || "");
-                                    let userName = document.getElementById("getUserName").text; //获取用户名
-                                    chatLog.appendChild(chatP);
-                                    socket.emit('chatMany', { name: userName, message: chatMany.value });
-                                } else { //私聊
-                                    chatP.innerHTML = "To " + (chatMany.value || "");
-                                    chatLog.appendChild(chatP);
-                                    let userName = document.getElementById("getUserName").text; //获取用户名
-                                    let message = chatMany.value.substr(chatMany.value.indexOf(":") + 1);
-                                    let name = chatMany.value.substr(0, chatMany.value.indexOf(":"));
-                                    alert(name);
-                                    socket.emit('chatOne', { from: userName, to: name, message: message }); //发送消息给固定用户
-                                }
-                            }
-                            this.canChat = false;
-                            chat.style.display = "none";
-                            if(!showing){
-                                this.domElement.requestPointerLock();
-                                this.domElement.addEventListener('click', this.domElement.requestPointerLock);
-                            }
-                            if (chatLog.children.length > 2) {
-                                chatLog.lastChild.scrollIntoView();
-                            }
+                        }
+                        this.canChat = false;
+                        chat.style.display = "none";
+                        if(!showing){
+                            this.domElement.requestPointerLock();
+                            this.domElement.addEventListener('click', this.domElement.requestPointerLock);
+                        }
+                        if (chatLog.children.length > 2) {
+                            chatLog.lastChild.scrollIntoView();
                         }
                     } else {
                         if (chatLog.children.length > 2) {
@@ -233,10 +221,18 @@ class FirstPersonControls {
         rotation.X+=Math.PI/2;
 
         this.backRaycaster.set( this.yawObject.position , rotation );
-        let horizontalIntersections = this.foreRaycaster.intersectObjects( this.scene.children, true);
-        let horizontalIntersections1 = this.foreRaycaster.intersectObjects( this.scene.children, true);
-        let horizontalIntersections2 = this.foreRaycaster.intersectObjects( this.scene.children, true);
-        let horizontalIntersections3 = this.foreRaycaster.intersectObjects( this.scene.children, true);
+        let children = [];
+        let length = this.scene.children.length;
+        for(let i = 0,j = 0;i<length;i++){
+            if(this.scene.children[i].name==="person")
+                continue;
+            children[j] = this.scene.children[i];
+            j++;
+        }
+        let horizontalIntersections = this.foreRaycaster.intersectObjects( children, true);
+        let horizontalIntersections1 = this.foreRaycaster.intersectObjects( children, true);
+        let horizontalIntersections2 = this.foreRaycaster.intersectObjects( children, true);
+        let horizontalIntersections3 = this.foreRaycaster.intersectObjects( children, true);
 
         let horOnObject = horizontalIntersections.length > 0 || horizontalIntersections1.lenght > 0 || horizontalIntersections2.length > 0||
             horizontalIntersections3.length > 0;//是否产生碰撞
