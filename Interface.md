@@ -21,6 +21,12 @@
     ---|---
     _id | 题目ID
     answer | 答案
+    
+    header 1 | header 2
+    ---|---
+    row 1 col 1 | row 1 col 2
+    row 2 col 1 | row 2 col 2
+
 
 
 + 返回值：
