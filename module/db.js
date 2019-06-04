@@ -28,7 +28,6 @@ class Db {
             }
 
         })
-
     }
     find(collectionName, json) {
         return new Promise((resolve, reject) => {
@@ -43,7 +42,6 @@ class Db {
                 })
             });
         })
-
     }
     update(collectionName, json, condition) {
         return new Promise((resolve, reject) => {
@@ -74,6 +72,20 @@ class Db {
         return new Promise((resolve, reject) => {
             this.connect().then((db) => {
                 db.collection(collectionName).remove(json, (err, result) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(result);
+                    }
+                })
+            })
+        })
+    }
+    random(collectionName, json) {
+        return new Promise((resolve, reject) => {
+            this.connect().then((db) => {
+                let res = db.collection(collectionName).aggregate(json);
+                res.toArray((err, result) => {
                     if (err) {
                         reject(err);
                     } else {

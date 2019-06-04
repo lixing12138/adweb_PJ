@@ -1,7 +1,7 @@
 const router = require('koa-router')();
-//引入数据库模块
+// 引入数据库模块
 const DB = require('./module/db');
-//登录
+// 登录
 router.get('/', async(ctx) => {
     await ctx.render('index');
 }).post('/', async(ctx) => {
@@ -17,7 +17,7 @@ router.get('/', async(ctx) => {
         // ctx.redirect('/scene');
     }
 });
-//注册
+// 注册
 router.get('/register', async(ctx) => {
     await ctx.render('register');
 }).post('/register', async(ctx) => {
@@ -33,14 +33,24 @@ router.get('/register', async(ctx) => {
 
     }
 });
-//场景
+// 场景
 router.get('/scene', async(ctx) => {
-    // console.log(ctx.session.name);
     if (ctx.session.name) {
         await ctx.render('scene', { name: ctx.session.name });
     } else {
         ctx.redirect('/');
     }
+});
+// 获取问题
+router.get('/question', async(ctx) => {
+    const res = await DB.random('question', [{ $sample: { size: 15 } }]);
+    console.log(res);
+    ctx.body = { data: res };
+}).post('/question', async(ctx) => {
+    let score = ctx.request.body.score;
+    let condition = ctx.request.body.res;
+
+
 });
 
 module.exports = router.routes();
