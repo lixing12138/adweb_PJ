@@ -8,7 +8,7 @@
     ```
     {
         data:{
-            "_id": "5cf5289b3204032b9c67ecd2",
+            "id": "5cf5289b3204032b9c67ecd2",
             "question": 'question',
         }
     }
@@ -17,10 +17,10 @@
 + url：```/question```
 + 方法：```POST```
 + 参数：
-    |参数|描述|
-    |:-|:-|
-    |_id|题目ID|
-    |answer|答案|
+    参数 | 描述
+    ---|---
+    id | 题目ID
+    answer | 答案
 + 返回值：
     ```
     {

@@ -1,4 +1,5 @@
 const router = require('koa-router')();
+const ObjectId = require('mongodb').ObjectId;
 // 引入数据库模块
 const DB = require('./module/db');
 // 登录
@@ -7,13 +8,12 @@ router.get('/', async(ctx) => {
 }).post('/', async(ctx) => {
     ctx.session.name = ctx.request.body.name;
     const res = await DB.find('users', ctx.request.body);
-    // console.log(res);
     if (res.length === 0) {
         ctx.response.type = 'json';
         ctx.body = { result: false, message: '用户名密码错误' };
     } else {
         ctx.response.type = 'json';
-        ctx.response.body = { result: true, message: '登录成功' };
+        ctx.body = { result: true, message: '登录成功' };
         // ctx.redirect('/scene');
     }
 });
@@ -24,11 +24,11 @@ router.get('/register', async(ctx) => {
     const res = await DB.find('users', { name: ctx.request.body.name });
     ctx.response.type = 'json';
     if (res.length !== 0) {
-        ctx.body = { result: false, message: '用户名重复' }
+        ctx.body = { result: false, message: '用户名重复', name: ctx.request.body.name }
     } else {
         const resRegister = await DB.insert('users', ctx.request.body);
         if (resRegister.result.ok) {
-            ctx.body = { result: true, message: '注册成功' }
+            ctx.body = { result: true, message: '注册成功', res: ctx.request.body };
         }
 
     }
@@ -36,20 +36,28 @@ router.get('/register', async(ctx) => {
 // 场景
 router.get('/scene', async(ctx) => {
     if (ctx.session.name) {
-        await ctx.render('scene', { name: ctx.session.name });
+        const res = await DB.find('users', { name: ctx.session.name });
+        await ctx.render('scene', { name: ctx.session.name, gender: res[0].gender, title: res[0].title, score: res[0].score });
     } else {
         ctx.redirect('/');
     }
 });
 // 获取问题
 router.get('/question', async(ctx) => {
-    const res = await DB.random('question', [{ $sample: { size: 15 } }]);
-    console.log(res);
-    ctx.body = { data: res };
+    const res = await DB.random('question', [{ $sample: { size: 1 } }]);
+    ctx.body = { data: res[0] };
 }).post('/question', async(ctx) => {
-    let score = ctx.request.body.score;
-    let condition = ctx.request.body.res;
-
+    if (ctx.session.name) {
+        const res = await DB.find('question', { "_id": ObjectId(ctx.request.body.id) });
+        if (res[0].answer === ctx.request.body.answer) {
+            await DB.update('users', { name: ctx.session.name }, { $inc: { 'score': 1 } });
+            ctx.body = { result: true };
+        } else {
+            ctx.body = { result: false, tip: res[0].tip };
+        }
+    } else {
+        ctx.redirect('/');
+    }
 
 });
 

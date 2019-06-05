@@ -43,10 +43,10 @@ class Db {
             });
         })
     }
-    update(collectionName, json, condition) {
+    update(collectionName, condition, json) {
         return new Promise((resolve, reject) => {
             this.connect().then((db) => {
-                db.collection(collectionName).update(json, { $set, condition }, (err, result) => {
+                db.collection(collectionName).updateOne(condition, json, (err, result) => {
                     if (err) {
                         reject(err);
                     } else

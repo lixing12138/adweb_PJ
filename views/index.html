@@ -23,8 +23,10 @@
                 <label for="passwordEncrypt">密码:</label>
                 <input type="password" class="form-control" name="passwordEncrypt" id="pwd" placeholder="请输入密码">
             </div>
-            <a href="/register">去注册</a>
-            <button type="submit" class="btn btn-primary" id="login">登录</button>
+            <div id="form-bottom">
+                <a href="/register">去注册</a>
+                <button type="submit" class="btn btn-primary" id="login">登录</button>
+            </div>
         </div>
     </div>
     <script>
@@ -38,7 +40,7 @@
                     url: '/',
                     method: 'post',
                     data: {
-                        name: name,
+                        name,
                         passwordEncrypt: pwd
                     },
                     success: function(res) {

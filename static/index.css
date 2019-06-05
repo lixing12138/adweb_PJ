@@ -1,3 +1,26 @@
-* {
-    color: red;
+html,
+body {
+    width: 100%;
+    height: 100%;
+    color: cadetblue;
+}
+
+body {
+    background: center no-repeat url('./bk.jpg');
+    background-size: cover;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 400px;
+    background-color: aliceblue;
+    padding: 30px;
+    opacity: 0.6;
+}
+
+#form-bottom {
+    float: right;
 }

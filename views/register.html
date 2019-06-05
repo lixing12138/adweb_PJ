@@ -23,13 +23,23 @@
                 <label for="passwordEncrypt">密码：</label>
                 <input type="password" class="form-control" id="pwd" name="passwordEncrypt" placeholder="请输入密码">
             </div>
-            <button type="submit" class="btn btn-primary" id="register">注册</button>
+            <div class="form-group">
+                <label for="gender">性别：</label>
+                <select class="form-control" id="gender">
+                    <option>男</option>
+                    <option>女</option>
+                </select>
+            </div>
+            <div id="form-bottom">
+                <button type="submit" class="btn btn-primary" id="register">注册</button>
+            </div>
         </div>
     </div>
     <script>
         $('#register').click(function() {
             let name = $('#name').val();
             let pwd = $('#pwd').val();
+            let gender = $('#gender').val();
             if (name.trim() == '' || pwd == '') {
                 alert('用户名密码不能为空');
             } else {
@@ -38,7 +48,8 @@
                     method: 'post',
                     data: {
                         name: name,
-                        passwordEncrypt: pwd
+                        passwordEncrypt: pwd,
+                        gender: gender
                     },
                     success: function(res) {
                         if (res.result) {
