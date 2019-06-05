@@ -54,11 +54,7 @@
             bottom: auto;
         }
         
-        #question-title {
-            position: absolute;
-            left: 10%;
-            top: 10%;
-        }
+
         
         #question {
             position: absolute;
@@ -67,7 +63,17 @@
             min-height: 100px;
             top: 10%;
         }
-        
+        #question-title {
+            position: absolute;
+            left: 10%;
+            top: 10%;
+        }
+        #detail{
+            position: absolute;
+            width: 100%;
+            height: 40%;
+            top: 20%;
+        }
         #answer {
             position: absolute;
             bottom: 0;
@@ -191,7 +197,7 @@
         <div id="close"></div>
         <div id="question" data-id="" data-count=1>
             <div id="question-title">题目 1/15 </div>
-
+            <div id="detail"></div>
             <div id="options">
                 <label for="optionT">答案</label>
                 <input name="option" type="radio" id="optionT" checked="checked" />T
@@ -201,7 +207,6 @@
             <button id="viewAnswer">提交答案</button>
             <button id="viewNext">下一题</button>
         </div>
-
         <div id="answer"></div>
     </div>
     <script src="/libs/three.js"></script>

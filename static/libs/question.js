@@ -8,7 +8,7 @@ close.addEventListener("click", function() {
     //关闭页面，去除答题内容和答案
     document.getElementById("question").setAttribute("data-id", "");
     document.getElementById("answer").innerText = "";
-
+    document.getElementById("detail").innerText = "";
     document.getElementById("questions").style.display = "none";
 }, false);
 
@@ -57,7 +57,7 @@ function getQuestion() {
 
             let data = res.data;
             question.setAttribute("data-id", data.id);
-            question.innerText = data.question; //修改题目
+            document.getElementById("detail").innerText = data.question; //修改题目
 
             let answer = document.getElementById("answer");
             answer.innerText = ""; //清空答案
