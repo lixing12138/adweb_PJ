@@ -44,7 +44,7 @@ function getQuestion() {
     let viewAnswer = document.getElementById("viewAnswer");
     let question = document.getElementById("question");
     let viewNext = document.getElementById("viewNext");
-    document.getElementById("question").style.display = "block";
+    document.getElementById("questions").style.display = "block";
     $.ajax({
         url: '/question',
         method: 'get',

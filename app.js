@@ -72,6 +72,11 @@ io.on('connection', function(socket) {
         console.log(userMap);
         socket.broadcast.emit('chatMany', { name: userMap.get(socket.id), message: data.message });
     });
+    //更换外形
+    socket.on('hat', function(data) {
+        data.socketid = socket.id;
+        socket.broadcast.emit('hat',data);
+    });
     //上线
     socket.on('player', function(data) {
         data.socketid = socket.id;

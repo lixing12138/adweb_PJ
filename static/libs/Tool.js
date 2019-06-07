@@ -116,6 +116,4 @@ function deleteGroup(group) {
             item.material.dispose(); // 删除材质
         }
     });
-    scene.remove(group);
-    group = null;
 }

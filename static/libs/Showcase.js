@@ -40,8 +40,26 @@ class Showcase {
     }
     show(model, index) {
         this.model = model;
-        this.model.position.z = -400;
-        this.model.position.x = this.model.name>4?400:-400;
+        //调整模型z轴位置
+        if(this.model.name<6){
+            this.model.position.z = -(this.model.name-1)*800-400;
+        }else {
+            this.model.position.z = -(this.model.name-6)*800-400;
+        }
+        if(this.model.name>10)
+            this.model.position.z = -2075;
+        //调整模型x轴位置
+        if(index!==1){
+            this.model.position.x = this.model.name>5?400:-400;
+        }else {
+            this.model.position.x = this.model.name>5?570:-570;
+            if(this.model.name===11)
+                this.model.position.x = -100;
+            if(this.model.name===12)
+                this.model.position.x = 100;
+            this.model.position.y = -200;
+        }
+
 
         this.scene.add(this.model);
         this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
