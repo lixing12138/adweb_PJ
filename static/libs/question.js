@@ -1,7 +1,7 @@
 let viewAnswer = document.getElementById("viewAnswer");
 let viewNext = document.getElementById("viewNext");
 let close = document.getElementById("close");
-
+let questionId;
 viewAnswer.addEventListener("click", getAnswer, false);
 viewNext.addEventListener("click", getQuestion, false);
 close.addEventListener("click", function() {
@@ -21,14 +21,15 @@ function getAnswer() {
         url: '/question',
         method: 'post',
         data: {
-            id: question.getAttribute("data-id"),
+            id: questionId,
             answer: (optionT.checked) ? "T" : "F"
         },
         success: function(res) {
             let data = res.data;
             let result = data.result;
+            $("#score").html(data.score);
             let tip = data.tip;
-            answer.innerText = "正确答案:" + result + "<br\>    " + tip;
+            answer.innerText = "正确答案:" + result + "\n" + tip;
             //请求成功禁止再次请求
             viewAnswer.removeEventListener("click", getAnswer);
         },
@@ -56,7 +57,8 @@ function getQuestion() {
             title.innerText = "题目 " + dataCount + "/15";
 
             let data = res.data;
-            question.setAttribute("data-id", data.id);
+            questionId = data._id;
+            question.setAttribute("data-id", data._id);
             document.getElementById("detail").innerText = data.question; //修改题目
 
             let answer = document.getElementById("answer");

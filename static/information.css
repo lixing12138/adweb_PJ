@@ -1,0 +1,38 @@
+.IFLabel {
+    font-size: 25px;
+    margin: 10px 0 10px 0;
+}
+.userInformationDiv {
+    min-width: 800px;
+    z-index:99;
+    display: none;
+    background-color: rgba(20,160,220,0.4);
+    height: 80%;
+    width: 70%;
+    border-radius: 25px;
+    border: 2px solid #8AC007;
+    margin: 10% 15% 0 15%;
+    padding: 20px;
+}
+.IFLabelValue{
+    font-size: 25px;
+    color: darkorange;
+    margin: 10px 0 10px 20px;
+}
+.IFTable {
+    width: 100%;
+}
+.ReIFTable {
+    width: 100%;
+    display: none;
+}
+.ReIFInput {
+    border-radius: 5px;
+    font-size: 20px;
+    margin: 10px 0 0px 0;
+}
+.IFButton{
+    float: left;
+    font-size: 15px;
+    margin: 10px 0 10px 0;
+}

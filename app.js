@@ -15,12 +15,12 @@ const port = 3003;
 const route = require('./route');
 //无效路由
 app.use(async(ctx, next) => {
-        await next();
-        if (ctx.status == 404) {
-            await ctx.render('404');
-        }
-    })
-    //配置模板
+    await next();
+    if (ctx.status == 404) {
+        await ctx.render('404');
+    }
+});
+//配置模板
 render(app, {
     root: path.join(__dirname, 'views'),
     extname: '.html',
@@ -52,8 +52,8 @@ io.on('connection', function(socket) {
     //login事件
     socket.on('login', function(data) {
         userMap.set(socket.id, data.name);
-        socket.broadcast.emit('login', { socketid: socket.id, name: data.name });
-        console.log(data.name);
+        console.log(userMap);
+        socket.broadcast.emit('login', { userMap: userMap });
     });
     //一对一聊天
     socket.on('chatOne', function(data) {

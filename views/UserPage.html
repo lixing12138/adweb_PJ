@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+        @import url("information.css");
+    </style>
+</head>
+
+<body>
+    <div id="userInformation" class="userInformationDiv">
+        <table class="IFTable">
+            <tr>
+                <td colspan="2">
+                    <label class="IFLabel">用户信息</label>
+                    <button class="btn btn-danger" style="float: right" id="quit"><span class="glyphicon glyphicon-remove "></span></button>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-6">
+                    <div id="subIFTable">
+                        <table>
+                            <tr>
+                                <td class="col-md-6">
+                                    <label class="IFLabel">名称 : </label>
+                                </td>
+                                <td class="col-md-6">
+                                    <label class="IFLabelValue" id="IFName">asdad</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-6">
+                                    <label class="IFLabel">积分 : </label>
+                                </td>
+                                <td class="col-md-6">
+                                    <label class="IFLabelValue" id="IFScore">666</label>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-6">
+                                    <label class="IFLabel">头衔 : </label>
+                                </td>
+                                <td class="col-md-6">
+                                    <label class="IFLabelValue" id="IFTitle">最强黑铁</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-6">
+                                    <button class="btn btn-primary IFButton" style="float: left" id="rename">修改名称</button>
+                                </td>
+                                <td class="col-md-6">
+                                    <button class="btn btn-primary IFButton" style="float: left" id="rePassword">修改密码</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="renameTable" class="ReIFTable">
+                        <table>
+                            <tr>
+                                <td colspan="2">
+                                    <label class="IFLabel" for="renameInput">新名称 : </label>
+                                    <input id="renameInput" type="text" class="ReIFInput">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-6">
+                                    <button class="btn btn-primary IFButton" id="renameSubmit">提交</button>
+                                </td>
+                                <td class="col-md-6">
+                                    <button class="btn btn-primary IFButton" id="renameBack">取消</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="rePasswordTable" class="ReIFTable">
+                        <table>
+                            <tr>
+                                <td colspan="2">
+                                    <label class="IFLabel" for="oldPassword">旧密码 : </label>
+                                    <input id="oldPassword" type="password" class="ReIFInput">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <label class="IFLabel" for="newPassword">新密码 : </label>
+                                    <input id="newPassword" type="password" class="ReIFInput">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <label class="IFLabel" for="beSurePassword">确认密码 : </label>
+                                    <input id="beSurePassword" type="password" class="ReIFInput">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button class="btn btn-primary IFButton" id="rePasswordSubmit">提交</button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary IFButton" id="rePasswordBack">取消</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+                <td class="col-md-6">
+                    <div class="img">
+                        <a target="_blank" href="http://static.runoob.com/images/demo/demo2.jpg">
+                            <img src="http://static.runoob.com/images/demo/demo2.jpg" alt="图片文本描述" width="400" height="300">
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <script>
+        const KEY_TAB = 9;
+        document.onkeydown = function(e) {
+            if (e.keyCode == KEY_TAB) {
+                document.getElementById("userInformation").style.display = "block";
+            }
+        };
+        document.getElementById("quit").onmousedown = function(e) {
+            document.getElementById("userInformation").style.display = "none";
+        };
+        document.getElementById("rename").onmousedown = function(e) {
+            document.getElementById("subIFTable").style.display = "none";
+            document.getElementById("renameTable").style.display = "block";
+        };
+        document.getElementById("rePassword").onmousedown = function(e) {
+            document.getElementById("subIFTable").style.display = "none";
+            document.getElementById("rePasswordTable").style.display = "block";
+        };
+        document.getElementById("renameBack").onmousedown = function(e) {
+            document.getElementById("subIFTable").style.display = "block";
+            document.getElementById("renameTable").style.display = "none";
+        };
+        document.getElementById("rePasswordBack").onmousedown = function(e) {
+            document.getElementById("subIFTable").style.display = "block";
+            document.getElementById("rePasswordTable").style.display = "none";
+        };
+        document.getElementById("renameSubmit").onmousedown = function(e) {
+            let newName = document.getElementById("renameInput").value;
+            if (newName !== "") { //名字非空且不重复判断
+                //...
+
+                alert("修改成功！");
+            } else {
+                alert("输入的名字不可用！");
+            }
+        };
+        document.getElementById("rePasswordSubmit").onmousedown = function(e) {
+            let oldPassword = document.getElementById("oldPassword").value;
+            let newPassword = document.getElementById("newPassword").value;
+            let beSurePassword = document.getElementById("beSurePassword").value;
+            if (newPassword !== beSurePassword) { //密码确认失败
+                alert("输入的新密码与确认密码不同!");
+            } else if (oldPassword !== "") { //旧密码非空且正确
+                alert("旧密码输入错误");
+            } else { //可修改
+                //...
+
+                alert("修改成功！");
+            }
+        };
+    </script>
+</body>
+
+</html>

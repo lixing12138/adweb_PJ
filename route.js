@@ -45,15 +45,21 @@ router.get('/scene', async(ctx) => {
 // 获取问题
 router.get('/question', async(ctx) => {
     const res = await DB.random('question', [{ $sample: { size: 1 } }]);
+    ctx.response.type = 'json';
     ctx.body = { data: res[0] };
 }).post('/question', async(ctx) => {
     if (ctx.session.name) {
         const res = await DB.find('question', { "_id": ObjectId(ctx.request.body.id) });
+        ctx.response.type = 'json';
         if (res[0].answer === ctx.request.body.answer) {
             await DB.update('users', { name: ctx.session.name }, { $inc: { 'score': 1 } });
-            ctx.body = { result: true };
+            let score = await DB.find('users', { name: ctx.session.name });
+            ctx.body = {
+                data: { result: true, tip: '', score: score[0].score || 0 + 1 }
+            }
         } else {
-            ctx.body = { result: false, tip: res[0].tip };
+            let score = await DB.find('users', { name: ctx.session.name });
+            ctx.body = { data: { result: false, tip: res[0].tip, score: score[0].score || 0 } }
         }
     } else {
         ctx.redirect('/');
