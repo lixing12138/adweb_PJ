@@ -24,7 +24,9 @@
 + 返回值：
     ```
     {
-        "result":true,
-        "tip":""
+        "data":{
+            "result":true,
+            "tip":"",
+        }
     }
     ```

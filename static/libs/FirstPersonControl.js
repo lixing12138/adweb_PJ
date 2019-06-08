@@ -22,8 +22,6 @@ class FirstPersonControls {
         this.leftRaycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(), 0, 30);
         this.backRaycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(), 0, 30);
 
-        //==========xiong
-
         this.scene = scene;
         this.domElement = domElement || document.body;
         this.isLocked = false;
