@@ -16,7 +16,7 @@
         </div>
         <div id="chat">
             <select id="userList">
-                <option id = "all">all</option>
+                <option value = "all">all</option>
             </select>
             <input id="chatMany" autofocus=autofocus value="">
         </div>
@@ -57,8 +57,8 @@
     <script src="/libs/Reflector.js"></script>
     <script src="/libs/GLTFLoader.js"></script>
     <script>
-        const socket = io('192.168.1.103:3003');
         // const socket = io('3.87.214.11:3003');
+        const socket = io('localhost:3003');
     </script>
     <script src="/libs/FirstPersonControl.js"></script>
     <script src="/libs/RectAreaLightUniformsLib.js"></script>
@@ -255,18 +255,21 @@
             }
         });
         socket.on('login', data => {
+            console.log(111);
             console.log(data);
-            data.userMap.map(t => {
-                $("#userList").append("<option id = '" + t.socketid + "'>" + t.name + "</option>");
+            data.userMap.forEach(t => {
+                $("#userList").empty();
+                $("#userList").append("<option value = '" + t.socketid + "'>" + t.name + "</option>");
             });
         });
         socket.on('hat', data => {
             let type = data.type;
             if (hatMap.get(data.socketid) !== null) {
                 if (sceneMap.get(data.socketid) === museum.index)
-                    museum.scene.add(hatMap.get(data.socketid));
+                    museum.scene.remove(hatMap.get(data.socketid));
                 deleteGroup(hatMap.get(data.socketid));
             }
+            alert(1111);
             hatMap.set(data.socketid, getHat(type));
             if (sceneMap.get(data.socketid) === museum.index)
                 museum.scene.add(hatMap.get(data.socketid));

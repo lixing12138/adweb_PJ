@@ -27,6 +27,7 @@ function getAnswer() {
         success: function(res) {
             let data = res.data;
             let result = data.result;
+            console.log(result);
             $("#score").html(data.score);
             let tip = data.tip;
             answer.innerText = "正确答案:" + result + "\n" + tip;
