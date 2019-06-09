@@ -52,6 +52,7 @@ router.get('/detail', async(ctx) => {
         ctx.redirect('/');
     }
 }).post('/detail', async(ctx) => {
+    console.log(ctx.request.body);
     if (ctx.session.name) {
         const res = await DB.find('users', { name: ctx.request.body.name });
         if (res.length === 0) {

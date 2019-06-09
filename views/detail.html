@@ -29,36 +29,35 @@
                     <input type="text" placeholder="请输入昵称" id="name">
                 </p>
                 <p>
-                    <label for="gender"><strong>修改性别：</strong></label>
-                    <select id="gender">
-                    <option>男</option>
-                    <option>女</option>
-                </select>
+                    <label for="name"><strong>修改密码：</strong></label>
+                    <input type="password" placeholder="请输入密码" id="pwd">
                 </p>
                 <button type="submit" class="btn btn-primary" id="submit">提交</button>
             </div>
         </div>
     </div>
     <script>
-        $("#change").click(function() {
-            $("#detail").slideToggle("slow");
+        $("#change ").click(function() {
+            $("#detail ").slideToggle("slow ");
         });
-        $("#submit").click(function() {
-            let name = $("#name").val() === '' ? {} : {
-                name: $("#name").val()
+        $("#submit ").click(function() {
+            let name = $("#name ").val() === '' ? {} : {
+                name: $("#name ").val()
             };
-            let gender = $("#gender").val();
+            let pwd = $("#pwd ").val() === '' ? {} : {
+                passwordEncrypt: $("#pwd ").val()
+            };
             $.ajax({
                 url: '/detail',
                 method: 'post',
                 data: {
                     ...name,
-                    gender
+                    ...pwd
                 },
                 success: function(data) {
                     if (data.result) {
                         alert(data.message);
-                        window.history.go(0);
+                        window.location.href = "/";
                     } else {
                         alert(data.message);
                     }
@@ -67,6 +66,11 @@
                     alert(err);
                 }
             });
+        });
+        $(document).keydown(function(event) {
+            if (event.keyCode == 9) {
+                window.location.href = "/scene";
+            }
         });
     </script>
 </body>
