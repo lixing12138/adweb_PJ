@@ -5,28 +5,28 @@ const session = require('koa-session');
 const bodyParser = require('koa-bodyparser');
 const static = require('koa-static');
 const app = new Koa();
-//chat
+// chat
 const server = require('http').Server(app.callback());
 const io = require('socket.io')(server);
 const port = 3003;
 
 
-//引入路由模块
+// 引入路由模块
 const route = require('./route');
-//无效路由
+// 无效路由
 app.use(async(ctx, next) => {
     await next();
     if (ctx.status == 404) {
         await ctx.render('404');
     }
 });
-//配置模板
+// 配置模板
 render(app, {
     root: path.join(__dirname, 'views'),
     extname: '.html',
     debug: process.env.NODE_ENV !== 'production'
 });
-//配置Session
+// 配置Session
 app.keys = ['some secret hurr'];
 const CONFIG = {
     key: 'koa:sess', //cookie key (default is koa:sess)
@@ -38,52 +38,41 @@ const CONFIG = {
     renew: false, //(boolean) renew session when session is nearly expired,
 };
 app.use(session(CONFIG, app));
-//post中间件
+// post中间件
 app.use(bodyParser());
-//静态资源
+// 静态资源
 app.use(static(path.join(__dirname, 'static')));
-//路由
+// 路由
 app.use(route);
-//chat
+// chat
 let userMap = new Map();
 //监听
 io.on('connection', function(socket) {
     console.log('client ' + socket.id + ' connected');
-    //login事件
+    // login事件
     socket.on('login', function(data) {
         userMap.set(socket.id, data.name);
-        console.log(userMap);
-        socket.broadcast.emit('login', { userMap: userMap });
+        io.sockets.emit('login', [...userMap]);
     });
-    //一对一聊天
+    // 一对一聊天
     socket.on('chatOne', function(data) {
-        console.log('chatOne' + data);
-        console.log(userMap);
-        userMap.forEach(function(value, key) {
-            if (value == data.to) {
-                console.log('发送');
-                io.to(key).emit('chatOne', { message: data.message, from: data.from });
-            }
-        }, userMap);
+        io.to(data.to).emit('chatOne', { message: data.message, from: data.from });
     });
-    //一对多聊天
+    // 一对多聊天
     socket.on('chatMany', function(data) {
-        console.log('chatMany' + data.message);
-        // console.log(userMap);
         socket.broadcast.emit('chatMany', { name: userMap.get(socket.id), message: data.message });
     });
-    //更换外形
+    // 更换外形
     socket.on('hat', function(data) {
         data.socketid = socket.id;
-        // console.log(data);
         socket.broadcast.emit('hat', data);
     });
-    //上线
+    // 上线
     socket.on('player', function(data) {
         data.socketid = socket.id;
         socket.broadcast.emit('player', data);
     });
-    //离线
+    // 离线
     socket.on('disconnect', function() {
         console.log('client ' + socket.id + ' disconnected');
         userMap.delete(socket.id);

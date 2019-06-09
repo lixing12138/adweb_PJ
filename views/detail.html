@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/detail.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.12.5/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <title>用户信息</title>
+</head>
+
+<body>
+    <div id="container">
+        <img src="/portrait.jpg" alt="头像" id="portrait">
+        <div id="info">
+            <h5>个人信息</h5>
+            <p><strong>昵称：</strong><span id="nickname">{{ name }}</span></p>
+            <p><strong>性别：</strong><span>{{ gender }}</span></p>
+            <p><strong>称号：</strong><span>{{if (score > 300)}}盖世才子{{else if (score>150) }}名震一方{{else if (score>100) }}小有成就{{ else if(score>60)}}略知一二{{ else if(score>30)}}初入学途{{ else if(score>15)}}稚嫩学童{{ else}}暂无称号{{/if}}</span></p>
+            <p><strong>积分：</strong><span>{{ score }}</span></p>
+            <button type="button" class="btn btn-link float-right" id="change">修改</button>
+            <div style="display: none" id="detail">
+                <p>
+                    <label for="name"><strong>修改昵称：</strong></label>
+                    <input type="text" placeholder="请输入昵称" id="name">
+                </p>
+                <p>
+                    <label for="gender"><strong>修改性别：</strong></label>
+                    <select id="gender">
+                    <option>男</option>
+                    <option>女</option>
+                </select>
+                </p>
+                <button type="submit" class="btn btn-primary" id="submit">提交</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        $("#change").click(function() {
+            $("#detail").slideToggle("slow");
+        });
+        $("#submit").click(function() {
+            let name = $("#name").val() === '' ? {} : {
+                name: $("#name").val()
+            };
+            let gender = $("#gender").val();
+            $.ajax({
+                url: '/detail',
+                method: 'post',
+                data: {
+                    ...name,
+                    gender
+                },
+                success: function(data) {
+                    if (data.result) {
+                        alert(data.message);
+                        window.history.go(0);
+                    } else {
+                        alert(data.message);
+                    }
+                },
+                err: function(err) {
+                    alert(err);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

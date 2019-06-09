@@ -14,7 +14,7 @@ let chatLog = document.getElementById("chatLog");
 
 
 class FirstPersonControls {
-    constructor(camera,scene, domElement) {
+    constructor(camera, scene, domElement) {
         //=========xiong
         //声明射线
         this.foreRaycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(), 0, 30);
@@ -39,7 +39,7 @@ class FirstPersonControls {
         this.clickHandler = this.domElement.requestPointerLock;
         this.onKeyDown = function(event) {
             if (this.canChat != true) {
-                if(event.shiftKey)
+                if (event.shiftKey)
                     this.speed = 300;
                 switch (event.keyCode) {
                     case KEY_W:
@@ -78,34 +78,38 @@ class FirstPersonControls {
                 case KTY_Space:
                     this.moveUp = true;
                     break;
-                //xwl 多人聊天
+                    //xwl 多人聊天
                 case KEY_ENTER:
+
                     if (this.canChat) {
-                        let chatTarget = document.getElementById("userList").value;
-                        if (chatTarget === "all") {
-                            this.chatModel = true ;
-                        }else {
-                            this.chatModel = false ;
-                        }
+                        let chatTarget = $("#userList").find("option:selected").text();
+
                         let chatP = document.createElement("p");
                         chatP.style.maxWidth = "250px";
                         if (chatMany.value) { //聊天框内有内容
+                            if (chatTarget === "all") {
+                                this.chatModel = true;
+                            } else {
+                                this.chatModel = false;
+                            }
                             if (this.chatModel) { //全体聊天
                                 chatP.innerHTML = "我：" + (chatMany.value || "");
                                 let userName = document.getElementById("getUserName").text; //获取用户名
                                 chatLog.appendChild(chatP);
                                 socket.emit('chatMany', { name: userName, message: chatMany.value });
                             } else { //私聊
-                                chatP.innerHTML = "To " +chatTarget+ chatMany.value ;
+
+                                chatP.innerHTML = "To " + chatTarget + ":" + chatMany.value;
                                 chatLog.appendChild(chatP);
-                                let userName = document.getElementById("getUserName").text; //获取用户名
+                                let userName = $("#getUserName").text(); //获取用户名
                                 let message = chatMany.value;
-                                socket.emit('chatOne', { from: userName, to: chatTarget, message: message }); //发送消息给固定用户
+                                let toId = $("#userList").val();
+                                socket.emit('chatOne', { from: userName, to: toId, message: message }); //发送消息给固定用户
                             }
                         }
                         this.canChat = false;
                         chat.style.display = "none";
-                        if(!showing){
+                        if (!showing) {
                             this.domElement.requestPointerLock();
                             this.domElement.addEventListener('click', this.domElement.requestPointerLock);
                         }
@@ -172,68 +176,68 @@ class FirstPersonControls {
 
         // 确定移动方向
         let direction = new THREE.Vector3();
-        direction.z = Number( this.moveBackward )- Number( this.moveForward )  ;
-        direction.x = Number( this.moveRight )- Number( this.moveLeft ) ;
+        direction.z = Number(this.moveBackward) - Number(this.moveForward);
+        direction.x = Number(this.moveRight) - Number(this.moveLeft);
         direction.y = 0;
 
         // 移动方向向量归一化，使得实际移动的速度大小不受方向影响
         direction.normalize();
         //=====xiong
-        let rotation = new THREE.Vector3();//相机朝向
-        rotation.copy(this.yawObject.getWorldDirection( new THREE.Vector3()).multiply(new THREE.Vector3(1, 0, 1)));
+        let rotation = new THREE.Vector3(); //相机朝向
+        rotation.copy(this.yawObject.getWorldDirection(new THREE.Vector3()).multiply(new THREE.Vector3(1, 0, 1)));
         //判断键盘按下的方向
         let m = new THREE.Matrix4();
-        if(direction.z > 0){
-            if(direction.x > 0){
-                m.makeRotationY(Math.PI/4);
-            } else if(direction.x < 0){
-                m.makeRotationY(-Math.PI/4);
-            } else{
+        if (direction.z > 0) {
+            if (direction.x > 0) {
+                m.makeRotationY(Math.PI / 4);
+            } else if (direction.x < 0) {
+                m.makeRotationY(-Math.PI / 4);
+            } else {
                 m.makeRotationY(0);
             }
-        } else if(direction.z < 0){
-            if(direction.x > 0){
-                m.makeRotationY(Math.PI/4*3);
-            } else if(direction.x < 0){
-                m.makeRotationY(-Math.PI/4*3);
-            } else{
+        } else if (direction.z < 0) {
+            if (direction.x > 0) {
+                m.makeRotationY(Math.PI / 4 * 3);
+            } else if (direction.x < 0) {
+                m.makeRotationY(-Math.PI / 4 * 3);
+            } else {
                 m.makeRotationY(Math.PI);
             }
-        } else{
-            if(direction.x > 0){
-                m.makeRotationY(Math.PI/2);
-            } else if(direction.x < 0){
-                m.makeRotationY(-Math.PI/2);
+        } else {
+            if (direction.x > 0) {
+                m.makeRotationY(Math.PI / 2);
+            } else if (direction.x < 0) {
+                m.makeRotationY(-Math.PI / 2);
             }
         }
         //给向量使用变换矩阵
         rotation.applyMatrix4(m);
 
 
-        this.foreRaycaster.set( this.yawObject.position , rotation );
-        rotation.X+=Math.PI/2;
-        this.leftRaycaster.set( this.yawObject.position , rotation );
-        rotation.X+=Math.PI/2;
+        this.foreRaycaster.set(this.yawObject.position, rotation);
+        rotation.X += Math.PI / 2;
+        this.leftRaycaster.set(this.yawObject.position, rotation);
+        rotation.X += Math.PI / 2;
 
-        this.rightRaycaster.set( this.yawObject.position , rotation );
-        rotation.X+=Math.PI/2;
+        this.rightRaycaster.set(this.yawObject.position, rotation);
+        rotation.X += Math.PI / 2;
 
-        this.backRaycaster.set( this.yawObject.position , rotation );
+        this.backRaycaster.set(this.yawObject.position, rotation);
         let children = [];
         let length = this.scene.children.length;
-        for(let i = 0,j = 0;i<length;i++){
-            if(this.scene.children[i].name==="person")
+        for (let i = 0, j = 0; i < length; i++) {
+            if (this.scene.children[i].name === "person")
                 continue;
             children[j] = this.scene.children[i];
             j++;
         }
-        let horizontalIntersections = this.foreRaycaster.intersectObjects( children, true);
-        let horizontalIntersections1 = this.foreRaycaster.intersectObjects( children, true);
-        let horizontalIntersections2 = this.foreRaycaster.intersectObjects( children, true);
-        let horizontalIntersections3 = this.foreRaycaster.intersectObjects( children, true);
+        let horizontalIntersections = this.foreRaycaster.intersectObjects(children, true);
+        let horizontalIntersections1 = this.foreRaycaster.intersectObjects(children, true);
+        let horizontalIntersections2 = this.foreRaycaster.intersectObjects(children, true);
+        let horizontalIntersections3 = this.foreRaycaster.intersectObjects(children, true);
 
-        let horOnObject = horizontalIntersections.length > 0 || horizontalIntersections1.lenght > 0 || horizontalIntersections2.length > 0||
-            horizontalIntersections3.length > 0;//是否产生碰撞
+        let horOnObject = horizontalIntersections.length > 0 || horizontalIntersections1.lenght > 0 || horizontalIntersections2.length > 0 ||
+            horizontalIntersections3.length > 0; //是否产生碰撞
 
 
         // 移动距离等于速度乘上间隔时间delta
@@ -246,11 +250,11 @@ class FirstPersonControls {
         this.speed = 150;
     };
 
-    removeLock(){
+    removeLock() {
         this.domElement.removeEventListener('click', this.clickHandler);
     }
 
-    addLock(){
+    addLock() {
         this.domElement.addEventListener('click', this.clickHandler);
     }
 

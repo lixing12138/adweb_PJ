@@ -26,7 +26,7 @@
         <p id="content"></p>
     </div>
     <div id="user">
-        <p>姓名：<span id="getUserName">{{ name }}</span></p>
+        <p>昵称：<span id="getUserName">{{ name }}</span></p>
         <p>性别：<span id="gender">{{ gender || '中'}}</span></p>
         <p>称号：
             <span id="getLevel">
@@ -52,13 +52,19 @@
         </div>
         <div id="answer"></div>
     </div>
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
     <script src="/libs/three.min.js"></script>
     <script src="/libs/socket.io.js"></script>
     <script src="/libs/Reflector.js"></script>
     <script src="/libs/GLTFLoader.js"></script>
     <script>
-        // const socket = io('3.87.214.11:3003');
-        const socket = io('localhost:3003');
+        $(document).keydown(function(event) {
+            if (event.keyCode == 9) {
+                window.location.href = "/detail";
+            }
+        });
+        const socket = io('3.87.214.11:3003');
+        // const socket = io('192.168.1.100:3003');
     </script>
     <script src="/libs/FirstPersonControl.js"></script>
     <script src="/libs/RectAreaLightUniformsLib.js"></script>
@@ -66,8 +72,6 @@
     <script src="/libs/OrbitControls.js"></script>
     <script src="/libs/Showcase.js"></script>
     <script src="/libs/content.js"></script>
-
-    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
     <script src="/libs/question.js"></script>
     <script src="/libs/Museum.js"></script>
     <script>
@@ -80,6 +84,8 @@
         let sceneMap = new Map(); //玩家id与场景对应
         let nameMap = new Map(); //玩家id与昵称对应
         let noRepeat = true; //禁止持续更换场景
+        let hatSize = [0.13, 1, 80, 0.9];
+        let hatLocate = [56, 55, 27, 63];
         const SCREEN_WIDTH = window.innerWidth,
             SCREEN_HEIGHT = window.innerHeight;
         socket.emit('login', {
@@ -138,40 +144,6 @@
             }
         }
 
-        function getHat(type) {
-            switch (type) {
-                case 1:
-                    loader.load("/resources/hat/1/scene.gltf", function(mesh) {
-                        mesh.scene.scale.set(0.6, 0.6, 0.6);
-                        mesh.scene.position.set(0, 58, 200);
-                        return mesh.scene;
-                    });
-                    break;
-                case 2:
-                    loader.load("/resources/hat/2/scene.gltf", function(mesh) {
-                        mesh.scene.scale.set(4, 4, 4);
-                        mesh.scene.position.set(0, 57, 300);
-                        return mesh.scene;
-                    });
-                    break;
-                case 3:
-                    loader.load("/resources/hat/3/scene.gltf", function(mesh) {
-                        mesh.scene.scale.set(320, 320, 320);
-                        mesh.scene.position.set(0, 27, 400);
-                        return mesh.scene;
-                    });
-                    break;
-                case 4:
-                    loader.load("/resources/hat/4/scene.gltf", function(mesh) {
-                        mesh.scene.scale.set(4, 4, 4);
-                        mesh.scene.position.set(0, 63, 500);
-                        return mesh.scene;
-                    });
-                    break;
-            }
-            return null;
-        }
-
         //用户数据和响应
         socket.on('player', data => {
             if (playerMap.has(data.socketid)) {
@@ -183,8 +155,11 @@
                 model.rotation.set(data.rotation._x, data.rotation._y + Math.PI, data.rotation._z);
                 let hat = hatMap.get(data.socketid);
                 if (hat !== null) {
-                    hat.position.set(data.position.x, data.position.y, data.position.z);
-                    hat.rotation.set(data.rotation._x, data.rotation._y, data.rotation._z);
+                    hat.position.x = data.position.x + 2.5;
+                    hat.position.z = data.position.z - 2.3;
+                    if (hat.name === "3")
+                        hat.position.z = data.position.z - 2.5;
+                    hat.rotation.set(data.rotation._x, data.rotation._y + Math.PI, data.rotation._z);
                 }
                 if (data.index !== sceneMap.get(data.socketid)) {
                     if (sceneMap.get(data.socketid) === museum.index) {
@@ -231,9 +206,6 @@
             playerMap.delete(data.socketid);
             sceneMap.delete(data.socketid);
             nameMap.delete(data.socketid);
-            let userList = document.getElementById("userList");
-            let option = document.getElementById(data.socketid);
-            userList.removeChild(option);
         });
         //xwl 多人聊天
         socket.on('chatMany', data => {
@@ -255,24 +227,39 @@
             }
         });
         socket.on('login', data => {
-            console.log(111);
-            console.log(data);
-            data.userMap.forEach(t => {
-                $("#userList").empty();
-                $("#userList").append("<option value = '" + t.socketid + "'>" + t.name + "</option>");
-            });
+            $("#userList").empty();
+            $("#userList").append("<option value = 'all'>all</option>");
+            for (let elem of data.values()) {
+                $("#userList").append("<option value = '" + elem[0] + "'>" + elem[1] + "</option>");
+            }
         });
-        socket.on('hat', data => {
+        socket.on('hat', async(data) => {
             let type = data.type;
             if (hatMap.get(data.socketid) !== null) {
                 if (sceneMap.get(data.socketid) === museum.index)
                     museum.scene.remove(hatMap.get(data.socketid));
                 deleteGroup(hatMap.get(data.socketid));
+                hatMap.set(data.socketid, null);
             }
-            alert(1111);
-            hatMap.set(data.socketid, getHat(type));
-            if (sceneMap.get(data.socketid) === museum.index)
-                museum.scene.add(hatMap.get(data.socketid));
+            if (type === 0)
+                return;
+            let hatModel = null;
+            let path = "/resources/hat/" + type + "/scene.gltf";
+            let size = hatSize[type - 1];
+            loader.load(path, function(mesh) {
+                mesh.scene.scale.set(size, size, size);
+                mesh.scene.position.set(0, hatLocate[type - 1], 0);
+                mesh.scene.name = "" + type;
+                hatModel = mesh.scene;
+                hatModel.position.x = playerMap.get(data.socketid).position.x + 2.5;
+                hatModel.position.z = playerMap.get(data.socketid).position.z - 2.3;
+                if (type === 3)
+                    hatModel.position.z -= 0.2
+
+                hatMap.set(data.socketid, hatModel);
+                if (sceneMap.get(data.socketid) === museum.index)
+                    museum.scene.add(hatMap.get(data.socketid));
+            });
         });
         window.addEventListener("resize", function() {
             museum.camera.aspect = window.innerWidth / window.innerHeight;
@@ -305,7 +292,6 @@
                     break;
                 case KEY_C:
                     if (hatType >= 0 && hatType < 4) {
-                        alert(2222);
                         hatType++;
                         socket.emit('hat', {
                             type: hatType
@@ -356,6 +342,18 @@
                     break;
             }
         });
+
+
+        $("#close").click(function() {
+            //关闭页面，去除答题内容和答案
+            document.getElementById("question").setAttribute("data-id", "");
+            document.getElementById("answer").innerText = "";
+            document.getElementById("detail").innerText = "";
+            document.getElementById("questions").style.display = "none";
+            museum.fpc.addLock();
+            museum.fpc.domElement.requestPointerLock();
+        });
+
         init();
     </script>
 </body>

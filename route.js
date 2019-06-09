@@ -42,6 +42,30 @@ router.get('/scene', async(ctx) => {
         ctx.redirect('/');
     }
 });
+
+// 个人信息
+router.get('/detail', async(ctx) => {
+    if (ctx.session.name) {
+        const res = await DB.find('users', { name: ctx.session.name });
+        await ctx.render('detail', { name: ctx.session.name, gender: res[0].gender, score: res[0].score });
+    } else {
+        ctx.redirect('/');
+    }
+}).post('/detail', async(ctx) => {
+    if (ctx.session.name) {
+        const res = await DB.find('users', { name: ctx.request.body.name });
+        if (res.length === 0) {
+            await DB.update('users', { name: ctx.session.name }, { $set: ctx.request.body });
+            ctx.session.name = ctx.request.body.name || ctx.session.name;
+            ctx.body = { result: true, message: "修改成功" }
+        } else {
+            ctx.body = { result: false, message: '用户名重复' }
+        }
+    } else {
+        ctx.redirect('/');
+    }
+});
+
 // 获取问题
 router.get('/question', async(ctx) => {
     const res = await DB.random('question', [{ $sample: { size: 1 } }]);

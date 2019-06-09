@@ -4,13 +4,6 @@ let close = document.getElementById("close");
 let questionId;
 viewAnswer.addEventListener("click", getAnswer, false);
 viewNext.addEventListener("click", getQuestion, false);
-close.addEventListener("click", function() {
-    //关闭页面，去除答题内容和答案
-    document.getElementById("question").setAttribute("data-id", "");
-    document.getElementById("answer").innerText = "";
-    document.getElementById("detail").innerText = "";
-    document.getElementById("questions").style.display = "none";
-}, false);
 
 function getAnswer() {
     let question = document.getElementById("question");
