@@ -54,6 +54,7 @@ canvas {
     height: 70%;
     min-height: 100px;
     top: 10%;
+    color: #EDEDED;
 }
 
 #question-title {

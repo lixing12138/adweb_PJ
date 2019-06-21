@@ -7,7 +7,6 @@
     <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
-
 <body>
     <div id="block">
         <div id="chatLog">
@@ -16,7 +15,7 @@
         </div>
         <div id="chat">
             <select id="userList">
-            <option value = "all">all</option>
+            <option value="all">all</option>
         </select>
             <input id="chatMany" autofocus=autofocus value="">
         </div>
@@ -39,7 +38,7 @@
 
         <div id="close"></div>
         <div id="question" data-id="" data-count=0>
-            <div id="question-title">题目 0/15 </div>
+            <div id="question-title">题目 0/15</div>
             <div id="detail"></div>
             <div id="options">
                 <label for="optionT">答案</label>
@@ -52,10 +51,6 @@
         </div>
         <div id="answer"></div>
     </div>
-    <div id="nameBlock">
-        <!--  用于显示游戏角色头顶的人名  -->
-        <p id="cube" class="playerName">立方体</p>
-    </div>
     <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
     <script src="/libs/three.min.js"></script>
     <script src="/libs/socket.io.js"></script>
@@ -67,8 +62,8 @@
                 window.location.href = "/detail";
             }
         });
-        // const socket = io('3.87.214.11:3003');
-        const socket = io('192.168.1.103:3003');
+        const socket = io('3.87.214.11:3003');
+        // const socket = io('192.168.1.100:3003');
     </script>
     <script src="/libs/FirstPersonControl.js"></script>
     <script src="/libs/RectAreaLightUniformsLib.js"></script>
@@ -77,23 +72,36 @@
     <script src="/libs/Showcase.js"></script>
     <script src="/libs/content.js"></script>
     <script src="/libs/question.js"></script>
+    <script src="/libs/Chat.js"></script>
     <script src="/libs/Museum.js"></script>
+    <video id="video" loop crossOrigin="anonymous" webkit-playsinline style="display:none">
+    <source src="" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+</video>
     <script>
         let museum;
         let renderer;
         let showcase;
         let hatType = 0;
+        let name = document.getElementById("getUserName").innerText;
+        let level = "暂无称号";
+        let chatWindow = new Chat();
         let playerMap = new Map(); //玩家id与模型对应
-        let hatMap = new Map(); //玩家id与帽子对应
+        let petMap = new Map(); //玩家id与宠物对应
         let sceneMap = new Map(); //玩家id与场景对应
         let nameMap = new Map(); //玩家id与昵称对应
+        let levelMap = new Map(); //玩家id与称呼对应
+        let spriteMap = new Map(); //玩家id与精灵画布对应
         let noRepeat = true; //禁止持续更换场景
-        let hatSize = [0.13, 1, 80, 0.9];
-        let hatLocate = [56, 55, 27, 63];
+        let petSize = [0.2, 4, 1];
+        let petLocate = [65, 65, 70];
         const SCREEN_WIDTH = window.innerWidth,
             SCREEN_HEIGHT = window.innerHeight;
         socket.emit('login', {
             name: $("#getUserName").text()
+        });
+        socket.emit('name', {
+            name: name,
+            level: level
         });
 
         function init() {
@@ -110,10 +118,12 @@
             scenesGroup[1] = new THREE.Object3D();
             museum.initSecond();
         }
+
         let clock = new THREE.Clock();
 
+        //渲染场景
         function render() {
-            let delta = clock.getDelta();
+            let delta = clock.getDelta(); //获取时间段
             museum.fpc.update(delta);
             museum.arrowHelper.position.y += museum.arrowFloat;
             if (museum.arrowHelper.position.y > 11)
@@ -121,6 +131,7 @@
             if (museum.arrowHelper.position.y < 9)
                 museum.arrowFloat = 0.05;
             museum.arrowHelper.visible = noRepeat;
+            //判断是否在展览物品
             if (showing)
                 renderer.render(showcase.scene, showcase.camera);
             else
@@ -131,12 +142,26 @@
                 index: museum.index,
                 gender: document.getElementById("gender").innerText
             });
+            //播放NPC动画
             for (let i = 0; i < mixers.length; i++) { // 重复播放动画
                 mixers[i].update(delta / playSpeed);
+            }
+            //判断用户名和称号是否变化
+            let boolean1 = (name !== document.getElementById("getUserName").innerText);
+            let boolean2 = (level !== document.getElementById("getLevel").innerText);
+            if (boolean1 || boolean2) {
+                alert(1);
+                name = document.getElementById("getUserName").innerText;
+                level = document.getElementById("getLevel").innerText;
+                socket.emit('name', {
+                    name: name,
+                    level: level
+                });
             }
             requestAnimationFrame(render);
         }
 
+        //更换NPC
         function changeRole(oldIndex, newIndex) {
             for (let id of playerMap) {
                 if (sceneMap.get(id[0]) === oldIndex) {
@@ -146,63 +171,49 @@
                     museum.scene.add(playerMap.get(id[0]));
             }
         }
+
         //用户数据和响应
         socket.on('player', data => {
+            //存在用户
             if (playerMap.has(data.socketid)) {
                 let model = playerMap.get(data.socketid);
                 if (model === null) {
                     return;
                 }
+                //模型位置更新
                 model.position.set(data.position.x, data.position.y + 30, data.position.z);
                 model.rotation.set(data.rotation._x, data.rotation._y + Math.PI, data.rotation._z);
-                let hat = hatMap.get(data.socketid);
-                if (hat !== null) {
-                    hat.position.x = data.position.x + 2.5;
-                    hat.position.z = data.position.z - 2.3;
-                    if (hat.name === "3")
-                        hat.position.z = data.position.z - 2.5;
-                    hat.rotation.set(data.rotation._x, data.rotation._y + Math.PI, data.rotation._z);
+                //宠物位置变换
+                let pet = petMap.get(data.socketid);
+                if (pet !== null) {
+                    pet.position.x = data.position.x; // + 1;
+                    pet.position.z = data.position.z; // - 1;
+                    if (pet.name === "3")
+                        pet.position.z = data.position.z - 2.6;
+                    pet.rotation.set(data.rotation._x, data.rotation._y + Math.PI, data.rotation._z);
                 }
+                //精灵画布位置更新
+                let sprite = spriteMap.get(data.socketid);
+                if (sprite !== null) {
+                    sprite.position.x = data.position.x;
+                    sprite.position.z = data.position.z;
+                }
+                //判断用户
                 if (data.index !== sceneMap.get(data.socketid)) {
                     if (sceneMap.get(data.socketid) === museum.index) {
                         museum.scene.remove(playerMap.get(data.socketid));
-                        museum.scene.remove(hatMap.get(data.socketid));
+                        museum.scene.remove(petMap.get(data.socketid));
                     }
                     sceneMap.set(data.socketid, data.index);
                     if (data.index === museum.index) {
                         museum.scene.add(playerMap.get(data.socketid));
-                        museum.scene.add(hatMap.get(data.socketid));
+                        museum.scene.add(petMap.get(data.socketid));
                     }
                 }
-                //更新游戏角色人名的位置
-                let vector = new THREE.Vector3();
-                vector = vector.setFromMatrixPosition(model.matrixWorld).project(museum.camera);
-
-                let vec = new THREE.Vector3(museum.camera.position.x - data.position.x,
-                    0, museum.camera.position.z - data.position.z);
-
-                let dir = new THREE.Vector3();
-                museum.camera.getWorldDirection(dir);
-                let degree = THREE.Math.radToDeg(dir.angleTo(vec));
-                console.log(degree);
-                let halfWidth = window.innerWidth / 2;
-                let halfHeight = window.innerHeight / 2;
-                let result = {
-                    x: Math.round(vector.x * halfWidth + halfWidth),
-                    y: Math.round(-vector.y * halfHeight + halfHeight)
-                };
-                //2D坐标
-                let player = document.getElementById(data.socketid);
-                if (degree > 90) {
-                    player.style.display = "none";
-                } else {
-                    player.style.display = "block";
-                }
-                player.style.left = result.x + "px";
-                player.style.top = result.y + "px";
             } else {
                 playerMap.set(data.socketid, null);
-                hatMap.set(data.socketid, null);
+                petMap.set(data.socketid, null);
+                spriteMap.set(data.socketid, null);
                 if (data.gender === "男") {
                     loader.load("/resources/role/man/scene.gltf", (mesh) => {
                         mesh.scene.scale.set(30, 30, 30);
@@ -225,14 +236,25 @@
                         }
                     });
                 }
+                if (nameMap.get(data.socketid) !== $("#getUserName").text()) {
+                    //先用画布将文字画出
+                    let textObj = new THREE.Sprite(getName(nameMap.get(data.socketid), levelMap.get(data.socketid)));
+                    textObj.scale.set(50, 25, 75);
+                    textObj.position.set(data.position.x, data.position.y + 60, data.position.z);
+                    museum.scene.add(textObj);
+                    spriteMap.set(data.socketid, textObj);
+                }
             }
         });
+
         socket.on('offline', data => {
             if (sceneMap.get(data.socketid) === museum.index)
                 museum.scene.remove(playerMap.get(data.socketid));
             playerMap.delete(data.socketid);
             sceneMap.delete(data.socketid);
+            petMap.delete(data.socketid);
             nameMap.delete(data.socketid);
+            levelMap.delete(data.socketid);
         });
         //xwl 多人聊天
         socket.on('chatMany', data => {
@@ -244,6 +266,7 @@
                 chatLog.lastChild.scrollIntoView();
             }
         });
+        //私聊
         socket.on('chatOne', data => {
             let chatP = document.createElement("p");
             chatP.style.maxWidth = "250px";
@@ -253,43 +276,51 @@
                 chatLog.lastChild.scrollIntoView();
             }
         });
+        //上线
         socket.on('login', data => {
             $("#userList").empty();
-            $("#nameBlock").empty();
             $("#userList").append("<option value = 'all'>all</option>");
             for (let elem of data.values()) {
                 $("#userList").append("<option value = '" + elem[0] + "'>" + elem[1] + "</option>");
-                if (elem[1] != $("#getUserName").text()) {
-                    $("#nameBlock").append("<p class = 'playerName' id = '" + elem[0] + "'>" + elem[1] + "</p>");
-                }
+                nameMap.set(elem[0], elem[1]);
+                levelMap.set(elem[0], "暂无称号");
             }
         });
-        socket.on('hat', async(data) => {
+        //宠物更换
+        socket.on('pet', async(data) => {
             let type = data.type;
-            if (hatMap.get(data.socketid) !== null) {
+            if (petMap.get(data.socketid) !== null) {
                 if (sceneMap.get(data.socketid) === museum.index)
-                    museum.scene.remove(hatMap.get(data.socketid));
-                deleteGroup(hatMap.get(data.socketid));
-                hatMap.set(data.socketid, null);
+                    museum.scene.remove(petMap.get(data.socketid));
+                deleteGroup(petMap.get(data.socketid));
+                petMap.set(data.socketid, null);
             }
             if (type === 0)
                 return;
-            let hatModel = null;
-            let path = "/resources/hat/" + type + "/scene.gltf";
-            let size = hatSize[type - 1];
+            let petModel = null;
+            let path = "/resources/pet/" + type + "/scene.gltf";
+            let size = petSize[type - 1];
             loader.load(path, function(mesh) {
                 mesh.scene.scale.set(size, size, size);
-                mesh.scene.position.set(0, hatLocate[type - 1], 0);
+                mesh.scene.position.set(0, petLocate[type - 1], 0);
                 mesh.scene.name = "" + type;
-                hatModel = mesh.scene;
-                hatModel.position.x = playerMap.get(data.socketid).position.x + 2.5;
-                hatModel.position.z = playerMap.get(data.socketid).position.z - 2.3;
-                if (type === 3)
-                    hatModel.position.z -= 0.2
-                hatMap.set(data.socketid, hatModel);
+                petModel = mesh.scene;
+
+                petMap.set(data.socketid, petModel);
                 if (sceneMap.get(data.socketid) === museum.index)
-                    museum.scene.add(hatMap.get(data.socketid));
+                    museum.scene.add(petMap.get(data.socketid));
             });
+        });
+        //名称更换
+        socket.on('name', async(data) => {
+            museum.scene.remove(spriteMap.get(data.socketid));
+            nameMap.set(data.socketid, data.name);
+            levelMap.set(data.socketid, data.level);
+            let textObj = new THREE.Sprite(getName(data.name, data.level));
+            textObj.scale.set(50, 25, 75);
+            textObj.position.set(data.position.x, data.position.y + 60, data.position.z);
+            museum.scene.add(textObj);
+            spriteMap.set(data.socketid, textObj);
         });
         window.addEventListener("resize", function() {
             museum.camera.aspect = window.innerWidth / window.innerHeight;
@@ -301,86 +332,101 @@
         const KEY_N = 78;
         const KEY_O = 79;
         const KEY_Q = 81;
+        const KEY_ENTER = 13;
         document.addEventListener("keydown", function(e) {
-            if (museum.fpc.canChat)
-                return;
-            let distance = Math.sqrt(Math.pow(museum.fpc.yawObject.position.x, 2) + Math.pow(museum.fpc.yawObject.position.z, 2));
-            if (distance > 25) {
-                noRepeat = true;
-            }
-            switch (e.keyCode) {
-                case KEY_B:
-                    if (distance < 25 && noRepeat) {
-                        console.log('enter');
-                        noRepeat = false;
-                        if (museum.index !== 0) {
-                            changeRole(this.index, this.index - 1);
-                            museum.back();
-                        }
-                    }
-                    break;
-                case KEY_C:
-                    if (hatType >= 0 && hatType < 4) {
-                        hatType++;
-                        socket.emit('hat', {
-                            type: hatType
-                        });
-                    } else if (type === 4) {
-                        hatType = 0;
-                        socket.emit('hat', {
-                            type: hatType
-                        });
-                    }
-                    break;
-                case KEY_N:
-                    if (distance < 25 && noRepeat) {
-                        noRepeat = false;
-                        if (museum.index !== 4) {
-                            changeRole(this.index, this.index + 1);
-                            museum.forward();
-                        }
-                    }
-                    break;
-                case KEY_O:
-                    if (museum.index === 0)
+                    if (museum.fpc.canChat)
                         return;
-                    showing = !showing;
-                    if (showing) {
-                        museum.scene.remove(scenesGroup[museum.index]);
-                        showcase.show(museum.getShowModel(), museum.index - 1);
-                        museum.fpc.removeLock();
-                        document.exitPointerLock();
-                    } else {
-                        let model = showcase.delete();
-                        scenesGroup[museum.index].add(model);
-                        museum.scene.add(scenesGroup[museum.index]);
-                        museum.fpc.addLock();
-                        museum.fpc.domElement.requestPointerLock();
+                    let distance = Math.sqrt(Math.pow(museum.fpc.yawObject.position.x, 2) + Math.pow(museum.fpc.yawObject.position.z, 2));
+                    if (distance > 25) {
+                        noRepeat = true;
                     }
-                    break;
-                case KEY_Q:
-                    if (museum.index !== 2)
-                        return;
-                    let openQuestion = Math.sqrt(Math.pow(museum.fpc.yawObject.position.x + 350, 2) + Math.pow(museum.fpc.yawObject.position.z - 150, 2));
-                    openQuestion = openQuestion < 50;
-                    if (openQuestion) {
-                        museum.fpc.removeLock();
-                        document.exitPointerLock();
-                        getQuestion();
-                    }
-                    break;
-            }
-        });
-        $("#close").click(function() {
-            //关闭页面，去除答题内容和答案
-            document.getElementById("question").setAttribute("data-id", "");
-            document.getElementById("answer").innerText = "";
-            document.getElementById("detail").innerText = "";
-            document.getElementById("questions").style.display = "none";
-            museum.fpc.addLock();
-            museum.fpc.domElement.requestPointerLock();
-        });
-        init();
+                    switch (e.keyCode) {
+                        case KEY_B:
+                            if (distance < 40 && noRepeat) {
+                                console.log('enter');
+                                noRepeat = false;
+
+                                if (museum.index !== 0) {
+                                    changeRole(museum.index, museum.index - 1);
+                                    museum.back();
+                                }
+                            }
+                            break;
+                        case KEY_C:
+                            if (hatType >= 0 && hatType < 4) {
+                                hatType++;
+                                socket.emit('pet', {
+                                    type: hatType
+                                });
+                            } else if (type === 4) {
+                                hatType = 0;
+                                socket.emit('pet', {
+                                    type: hatType
+                                });
+                            }
+                            break;
+                        case KEY_N:
+                            if (distance < 40 && noRepeat) {
+                                noRepeat = false;
+                                if (museum.index !== 4) {
+                                    changeRole(museum.index, museum.index + 1);
+                                    museum.forward();
+                                }
+                            }
+                            break;
+                        case KEY_O:
+                            if (museum.index === 0 || chatWindow.canChat)
+                                return;
+                            showing = !showing;
+                            if (showing) {
+                                museum.scene.remove(scenesGroup[museum.index]);
+                                showcase.show(museum.getShowModel(), museum.index - 1);
+                                museum.fpc.removeLock();
+                            } else {
+                                let model = showcase.delete();
+                                scenesGroup[museum.index].add(model);
+                                museum.scene.add(scenesGroup[museum.index]);
+                                museum.fpc.addLock();
+                            }
+                            break;
+                        case KEY_Q:
+                            if (parseInt(question.getAttribute("data-count") !== 0) return;
+                                if (museum.index !== 2)
+                                    return;
+                                let openQuestion = Math.sqrt(Math.pow(museum.fpc.yawObject.position.x + 350, 2) + Math.pow(museum.fpc.yawObject.position.z - 150, 2)); openQuestion = openQuestion < 50;
+                                if (openQuestion) {
+                                    museum.fpc.removeLock();
+                                    getQuestion();
+                                }
+                                break;
+                                case KEY_ENTER:
+                                    if (chatWindow.canChat) {
+                                        chatWindow.send();
+                                        if (!showing) {
+                                            museum.fpc.addLock();
+                                        }
+                                    } else {
+                                        museum.fpc.removeLock();
+                                        chatWindow.open();
+                                    }
+                            }
+                    });
+
+
+                $("#close").click(function() {
+                    //关闭页面，去除答题内容和答案
+                    let title = document.getElementById("question-title");
+                    title.innerText = "题目 0/15";
+                    document.getElementById("question").setAttribute("data-count", "0");
+                    document.getElementById("viewNext").style.display = "block";
+                    document.getElementById("question").setAttribute("data-id", "");
+                    document.getElementById("answer").innerText = "";
+                    document.getElementById("detail").innerText = "";
+                    document.getElementById("questions").style.display = "none";
+                    museum.fpc.addLock();
+                });
+
+                init();
     </script>
 </body>
 
