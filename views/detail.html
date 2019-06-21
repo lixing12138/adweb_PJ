@@ -15,11 +15,11 @@
 
 <body>
     <div id="container">
-        <img src="/portrait.jpg" alt="头像" id="portrait">
+        <img src="/resources/portrait/female.jpg" alt="头像" id="portrait">
         <div id="info">
-            <h5>个人信息</h5>
+            <h4>个人信息</h4>
             <p><strong>昵称：</strong><span id="nickname">{{ name }}</span></p>
-            <p><strong>性别：</strong><span>{{ gender }}</span></p>
+            <p><strong>性别：</strong><span id="gender">{{ gender }}</span></p>
             <p><strong>称号：</strong><span>{{if (score > 300)}}盖世才子{{else if (score>150) }}名震一方{{else if (score>100) }}小有成就{{ else if(score>60)}}略知一二{{ else if(score>30)}}初入学途{{ else if(score>15)}}稚嫩学童{{ else}}暂无称号{{/if}}</span></p>
             <p><strong>积分：</strong><span>{{ score }}</span></p>
             <button type="button" class="btn btn-link float-right" id="change">修改</button>
@@ -37,35 +37,43 @@
         </div>
     </div>
     <script>
+        let portrait = ($("#gender").text() === '男') ? '/resources/portrait/male.jpg' : '/resources/portrait/female.jpg';
+        $("#portrait").attr({
+            "src": portrait
+        });
         $("#change ").click(function() {
             $("#detail ").slideToggle("slow ");
         });
         $("#submit ").click(function() {
-            let name = $("#name ").val() === '' ? {} : {
-                name: $("#name ").val()
-            };
-            let pwd = $("#pwd ").val() === '' ? {} : {
-                passwordEncrypt: $("#pwd ").val()
-            };
-            $.ajax({
-                url: '/detail',
-                method: 'post',
-                data: {
-                    ...name,
-                    ...pwd
-                },
-                success: function(data) {
-                    if (data.result) {
-                        alert(data.message);
-                        window.location.href = "/";
-                    } else {
-                        alert(data.message);
+            if ($("#name ").val().length > 10) {
+                alert('用户名长度不超过10个字符');
+            } else {
+                let name = $("#name ").val() === '' ? {} : {
+                    name: $("#name ").val()
+                };
+                let pwd = $("#pwd ").val() === '' ? {} : {
+                    passwordEncrypt: $("#pwd ").val()
+                };
+                $.ajax({
+                    url: '/detail',
+                    method: 'post',
+                    data: {
+                        ...name,
+                        ...pwd
+                    },
+                    success: function(data) {
+                        if (data.result) {
+                            alert(data.message);
+                            window.location.href = "/";
+                        } else {
+                            alert(data.message);
+                        }
+                    },
+                    err: function(err) {
+                        alert(err);
                     }
-                },
-                err: function(err) {
-                    alert(err);
-                }
-            });
+                });
+            }
         });
         $(document).keydown(function(event) {
             if (event.keyCode == 9) {

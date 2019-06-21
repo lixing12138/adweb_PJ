@@ -2,6 +2,7 @@ const router = require('koa-router')();
 const ObjectId = require('mongodb').ObjectId;
 // 引入数据库模块
 const DB = require('./module/db');
+const axios = require('axios');
 // 登录
 router.get('/', async(ctx) => {
     await ctx.render('index');
@@ -89,7 +90,29 @@ router.get('/question', async(ctx) => {
     } else {
         ctx.redirect('/');
     }
-
 });
 
+// 聊天
+router.get('/chat', async(ctx) => {
+    let res = await axios.post('http://openapi.tuling123.com/openapi/api/v2', {
+        "reqType": 0,
+        "perception": {
+            "inputText": {
+                "text": ctx.request.body.chat
+            },
+            "selfInfo": {
+                "location": {
+                    "city": "北京",
+                    "province": "北京",
+                    "street": "信息路"
+                }
+            }
+        },
+        "userInfo": {
+            "apiKey": "2b6c6eb246924848848ea42304fba659",
+            "userId": "d8c55ecbeda9f0b3"
+        }
+    });
+    ctx.body = { res: res.data.results[0].values.text };
+});
 module.exports = router.routes();

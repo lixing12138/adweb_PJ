@@ -78,7 +78,7 @@ class FirstPersonControls {
                 case KTY_Space:
                     this.moveUp = true;
                     break;
-                    //xwl 多人聊天
+                //xwl 多人聊天
                 case KEY_ENTER:
 
                     if (this.canChat) {
@@ -248,6 +248,7 @@ class FirstPersonControls {
 
         //=====xiong
         this.speed = 150;
+
     };
 
     removeLock() {

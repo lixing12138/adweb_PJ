@@ -17,7 +17,7 @@
         <div>
             <div class="form-group">
                 <label for="name">用户名：</label>
-                <input type="text" class="form-control" name="name" id="name" placeholder="请输入用户名">
+                <input type="text" class="form-control" name="name" id="name" placeholder="请输入用户名，长度不超过10个字符">
             </div>
             <div class="form-group">
                 <label for="passwordEncrypt">密码：</label>
@@ -42,6 +42,8 @@
             let gender = $('#gender').val();
             if (name.trim() == '' || pwd == '') {
                 alert('用户名密码不能为空');
+            } else if ($('#name').val().length > 10) {
+                alert('用户名长度不超过10个字符');
             } else {
                 $.ajax({
                     url: '/register',

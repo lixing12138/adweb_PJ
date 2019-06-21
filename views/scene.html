@@ -16,8 +16,8 @@
         </div>
         <div id="chat">
             <select id="userList">
-                <option value = "all">all</option>
-            </select>
+            <option value = "all">all</option>
+        </select>
             <input id="chatMany" autofocus=autofocus value="">
         </div>
     </div>
@@ -52,6 +52,10 @@
         </div>
         <div id="answer"></div>
     </div>
+    <div id="nameBlock">
+        <!--  用于显示游戏角色头顶的人名  -->
+        <p id="cube" class="playerName">立方体</p>
+    </div>
     <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
     <script src="/libs/three.min.js"></script>
     <script src="/libs/socket.io.js"></script>
@@ -63,8 +67,8 @@
                 window.location.href = "/detail";
             }
         });
-        const socket = io('3.87.214.11:3003');
-        // const socket = io('192.168.1.100:3003');
+        // const socket = io('3.87.214.11:3003');
+        const socket = io('192.168.1.103:3003');
     </script>
     <script src="/libs/FirstPersonControl.js"></script>
     <script src="/libs/RectAreaLightUniformsLib.js"></script>
@@ -106,7 +110,6 @@
             scenesGroup[1] = new THREE.Object3D();
             museum.initSecond();
         }
-
         let clock = new THREE.Clock();
 
         function render() {
@@ -143,7 +146,6 @@
                     museum.scene.add(playerMap.get(id[0]));
             }
         }
-
         //用户数据和响应
         socket.on('player', data => {
             if (playerMap.has(data.socketid)) {
@@ -172,6 +174,32 @@
                         museum.scene.add(hatMap.get(data.socketid));
                     }
                 }
+                //更新游戏角色人名的位置
+                let vector = new THREE.Vector3();
+                vector = vector.setFromMatrixPosition(model.matrixWorld).project(museum.camera);
+
+                let vec = new THREE.Vector3(museum.camera.position.x - data.position.x,
+                    0, museum.camera.position.z - data.position.z);
+
+                let dir = new THREE.Vector3();
+                museum.camera.getWorldDirection(dir);
+                let degree = THREE.Math.radToDeg(dir.angleTo(vec));
+                console.log(degree);
+                let halfWidth = window.innerWidth / 2;
+                let halfHeight = window.innerHeight / 2;
+                let result = {
+                    x: Math.round(vector.x * halfWidth + halfWidth),
+                    y: Math.round(-vector.y * halfHeight + halfHeight)
+                };
+                //2D坐标
+                let player = document.getElementById(data.socketid);
+                if (degree > 90) {
+                    player.style.display = "none";
+                } else {
+                    player.style.display = "block";
+                }
+                player.style.left = result.x + "px";
+                player.style.top = result.y + "px";
             } else {
                 playerMap.set(data.socketid, null);
                 hatMap.set(data.socketid, null);
@@ -199,7 +227,6 @@
                 }
             }
         });
-
         socket.on('offline', data => {
             if (sceneMap.get(data.socketid) === museum.index)
                 museum.scene.remove(playerMap.get(data.socketid));
@@ -228,9 +255,13 @@
         });
         socket.on('login', data => {
             $("#userList").empty();
+            $("#nameBlock").empty();
             $("#userList").append("<option value = 'all'>all</option>");
             for (let elem of data.values()) {
                 $("#userList").append("<option value = '" + elem[0] + "'>" + elem[1] + "</option>");
+                if (elem[1] != $("#getUserName").text()) {
+                    $("#nameBlock").append("<p class = 'playerName' id = '" + elem[0] + "'>" + elem[1] + "</p>");
+                }
             }
         });
         socket.on('hat', async(data) => {
@@ -255,7 +286,6 @@
                 hatModel.position.z = playerMap.get(data.socketid).position.z - 2.3;
                 if (type === 3)
                     hatModel.position.z -= 0.2
-
                 hatMap.set(data.socketid, hatModel);
                 if (sceneMap.get(data.socketid) === museum.index)
                     museum.scene.add(hatMap.get(data.socketid));
@@ -283,7 +313,6 @@
                     if (distance < 25 && noRepeat) {
                         console.log('enter');
                         noRepeat = false;
-
                         if (museum.index !== 0) {
                             changeRole(this.index, this.index - 1);
                             museum.back();
@@ -342,8 +371,6 @@
                     break;
             }
         });
-
-
         $("#close").click(function() {
             //关闭页面，去除答题内容和答案
             document.getElementById("question").setAttribute("data-id", "");
@@ -353,7 +380,6 @@
             museum.fpc.addLock();
             museum.fpc.domElement.requestPointerLock();
         });
-
         init();
     </script>
 </body>
