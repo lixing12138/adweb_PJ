@@ -1,3 +1,32 @@
+# 前端说明
+## 关键功能实现
++ <strong>注册功能</strong>
+用户提交信息，将数据保存到数据库。每条用户信息以id作为唯一标识，id由数据库自行生成。注册时会检测用户名称，若与已存在用户名称相同，将无法注册。
+
++ <strong>登录功能</strong>
+用户提交信息，后端进行数据检测，如果用户名和密码匹配，则提示登陆成功，并路由跳转到场景页面；否则弹框提示错误信息
+
++ <strong>人物位置更新</strong>
+在每次渲染场景时，客户端会通过socket，将自己的位置信息发送到服务端，服务端将会把这些信息传给其他所有用户。每个用户都保存有对应其他用户的模型，只需要将模型位置更新为服务端发送过来的新值，场景中对应的模型就自动移动到新位置。
+
++ <strong>用户信息修改</strong>
+用户可以修改个人信息，包括用户名、密码；如果修改密码，修改成功后将要求用户重新登录
+
++ <strong>场景切换</strong>
+一共有5个场景，每个场景实际上都是一个3DObject对象
+
++ <strong>物品展示</strong>
+
+## 附加功能实现
+
++ <strong>多人/单人聊天</strong>
+
++ <strong>智能系统助手</strong>
+
++ <strong>宠物更换</strong>
+
++ <strong>答题机制</strong>
+
 # 后端说明文档
 ## 简介
 本次后端采用基于Node.js平台的下一代web框架-Koa实现，利用的技术如下：
@@ -34,7 +63,7 @@
 为方便数据库的CURD操作，此次对Mongodb进行封装，并且利用单例模式减少与数据库建立连接的时间
 
 + 图灵机器人：
-    + 利用axios向```http://openapi.tuling123.com/openapi/api/v2```发送post请求，并得到返回的数据：实现如下：
+    + 利用axios模块向```http://openapi.tuling123.com/openapi/api/v2```发送post请求，并得到返回的数据：实现如下：
         ```
         let res = await axios.post('http://openapi.tuling123.com/openapi/api/v2', {
                 "reqType": 0,
@@ -57,3 +86,7 @@
         });
         ctx.body = { res: res.data.results[0].values.text };
         ```
++ 服务端部署：
+    + 安装node.js
+    + 安装Mongodb
+    + 
