@@ -319,7 +319,7 @@
             textObj.scale.set(50, 25, 75);
             textObj.position.set(data.position.x, data.position.y + 60, data.position.z);
             spriteMap.set(data.socketid, textObj);
-            document.getElementById("q").innerText = 0;
+            document.getElementById("q").innerText = -1;
             if (data.index === museum.index) {
                 document.getElementById("q").innerText = data.index;
                 museum.scene.add(spriteMap.get(data.socketid));
