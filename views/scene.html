@@ -49,7 +49,7 @@
             <button id="viewAnswer">提交答案</button>
             <button id="viewNext">下一题</button>
         </div>
-        <div id="answer"></div>
+        <div id="answer" style="color:white"></div>
     </div>
     <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
     <script src="/libs/three.min.js"></script>
@@ -334,99 +334,100 @@
         const KEY_Q = 81;
         const KEY_ENTER = 13;
         document.addEventListener("keydown", function(e) {
-                    if (museum.fpc.canChat)
-                        return;
-                    let distance = Math.sqrt(Math.pow(museum.fpc.yawObject.position.x, 2) + Math.pow(museum.fpc.yawObject.position.z, 2));
-                    if (distance > 25) {
-                        noRepeat = true;
+            if (museum.fpc.canChat)
+                return;
+            let distance = Math.sqrt(Math.pow(museum.fpc.yawObject.position.x, 2) + Math.pow(museum.fpc.yawObject.position.z, 2));
+            if (distance > 25) {
+                noRepeat = true;
+            }
+            switch (e.keyCode) {
+                case KEY_B:
+                    if (distance < 40 && noRepeat) {
+                        console.log('enter');
+                        noRepeat = false;
+
+                        if (museum.index !== 0) {
+                            changeRole(museum.index, museum.index - 1);
+                            museum.back();
+                        }
                     }
-                    switch (e.keyCode) {
-                        case KEY_B:
-                            if (distance < 40 && noRepeat) {
-                                console.log('enter');
-                                noRepeat = false;
-
-                                if (museum.index !== 0) {
-                                    changeRole(museum.index, museum.index - 1);
-                                    museum.back();
-                                }
-                            }
-                            break;
-                        case KEY_C:
-                            if (hatType >= 0 && hatType < 4) {
-                                hatType++;
-                                socket.emit('pet', {
-                                    type: hatType
-                                });
-                            } else if (type === 4) {
-                                hatType = 0;
-                                socket.emit('pet', {
-                                    type: hatType
-                                });
-                            }
-                            break;
-                        case KEY_N:
-                            if (distance < 40 && noRepeat) {
-                                noRepeat = false;
-                                if (museum.index !== 4) {
-                                    changeRole(museum.index, museum.index + 1);
-                                    museum.forward();
-                                }
-                            }
-                            break;
-                        case KEY_O:
-                            if (museum.index === 0 || chatWindow.canChat)
-                                return;
-                            showing = !showing;
-                            if (showing) {
-                                museum.scene.remove(scenesGroup[museum.index]);
-                                showcase.show(museum.getShowModel(), museum.index - 1);
-                                museum.fpc.removeLock();
-                            } else {
-                                let model = showcase.delete();
-                                scenesGroup[museum.index].add(model);
-                                museum.scene.add(scenesGroup[museum.index]);
-                                museum.fpc.addLock();
-                            }
-                            break;
-                        case KEY_Q:
-                            if (parseInt(question.getAttribute("data-count") !== 0) return;
-                                if (museum.index !== 2)
-                                    return;
-                                let openQuestion = Math.sqrt(Math.pow(museum.fpc.yawObject.position.x + 350, 2) + Math.pow(museum.fpc.yawObject.position.z - 150, 2)); openQuestion = openQuestion < 50;
-                                if (openQuestion) {
-                                    museum.fpc.removeLock();
-                                    getQuestion();
-                                }
-                                break;
-                                case KEY_ENTER:
-                                    if (chatWindow.canChat) {
-                                        chatWindow.send();
-                                        if (!showing) {
-                                            museum.fpc.addLock();
-                                        }
-                                    } else {
-                                        museum.fpc.removeLock();
-                                        chatWindow.open();
-                                    }
-                            }
-                    });
+                    break;
+                case KEY_C:
+                    if (hatType >= 0 && hatType < 4) {
+                        hatType++;
+                        socket.emit('pet', {
+                            type: hatType
+                        });
+                    } else if (type === 4) {
+                        hatType = 0;
+                        socket.emit('pet', {
+                            type: hatType
+                        });
+                    }
+                    break;
+                case KEY_N:
+                    if (distance < 40 && noRepeat) {
+                        noRepeat = false;
+                        if (museum.index !== 4) {
+                            changeRole(museum.index, museum.index + 1);
+                            museum.forward();
+                        }
+                    }
+                    break;
+                case KEY_O:
+                    if (museum.index === 0 || chatWindow.canChat)
+                        return;
+                    showing = !showing;
+                    if (showing) {
+                        museum.scene.remove(scenesGroup[museum.index]);
+                        showcase.show(museum.getShowModel(), museum.index - 1);
+                        museum.fpc.removeLock();
+                    } else {
+                        let model = showcase.delete();
+                        scenesGroup[museum.index].add(model);
+                        museum.scene.add(scenesGroup[museum.index]);
+                        museum.fpc.addLock();
+                    }
+                    break;
+                case KEY_Q:
+                    if (parseInt(question.getAttribute("data-count") !== 0)) return;
+                    if (museum.index !== 2)
+                        return;
+                    let openQuestion = Math.sqrt(Math.pow(museum.fpc.yawObject.position.x + 350, 2) + Math.pow(museum.fpc.yawObject.position.z - 150, 2));
+                    openQuestion = openQuestion < 50;
+                    if (openQuestion) {
+                        museum.fpc.removeLock();
+                        getQuestion();
+                    }
+                    break;
+                case KEY_ENTER:
+                    if (chatWindow.canChat) {
+                        chatWindow.send();
+                        if (!showing) {
+                            museum.fpc.addLock();
+                        }
+                    } else {
+                        museum.fpc.removeLock();
+                        chatWindow.open();
+                    }
+            }
+        });
 
 
-                $("#close").click(function() {
-                    //关闭页面，去除答题内容和答案
-                    let title = document.getElementById("question-title");
-                    title.innerText = "题目 0/15";
-                    document.getElementById("question").setAttribute("data-count", "0");
-                    document.getElementById("viewNext").style.display = "block";
-                    document.getElementById("question").setAttribute("data-id", "");
-                    document.getElementById("answer").innerText = "";
-                    document.getElementById("detail").innerText = "";
-                    document.getElementById("questions").style.display = "none";
-                    museum.fpc.addLock();
-                });
+        $("#close").click(function() {
+            //关闭页面，去除答题内容和答案
+            let title = document.getElementById("question-title");
+            title.innerText = "题目 0/15";
+            document.getElementById("question").setAttribute("data-count", "0");
+            document.getElementById("viewNext").style.display = "block";
+            document.getElementById("question").setAttribute("data-id", "");
+            document.getElementById("answer").innerText = "";
+            document.getElementById("detail").innerText = "";
+            document.getElementById("questions").style.display = "none";
+            museum.fpc.addLock();
+        });
 
-                init();
+        init();
     </script>
 </body>
 
