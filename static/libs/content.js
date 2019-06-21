@@ -35,7 +35,7 @@ let data = [
                     "是对于很多当代藏族青年来讲，木质酒壶是较难见到了。木质酒壶外形与木质酥油桶差不多，\n" +
                     "现存的木制酒壶，实属珍品。在现代，酒壶也有了新的发展，出现了新型材质的酒壶，\n" +
                     "如不锈钢酒壶等。"
-},
+            },
         "5":
             {
                 "title": "罐子",
@@ -728,3 +728,28 @@ let data = [
                     "石。\n"
             }
     }];
+let videoSrc = {
+    "0": "/resources/video/welcome.mp4",
+    "1": "/resources/video/ceramic.mp4",
+    "2": "/resources/video/paint.mp4",
+    "3": "/resources/video/weapon.mp4",
+    "4": "/resources/video/gem.mp4"
+};
+let description = {
+    "1": {
+        "title": "器",
+        "content": "容器里有人类的历史。"
+    },
+    "2": {
+        "title": "画",
+        "content": "远看山有色，近听水无声。"
+    },
+    "3": {
+        "title": "兵",
+        "content": "国之大事在祀与戎。"
+    },
+    "4": {
+        "title": "饰",
+        "content": "饰品造就人类。"
+    },
+};

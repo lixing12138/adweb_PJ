@@ -2,15 +2,12 @@ const KEY_W = 87;
 const KEY_S = 83;
 const KEY_A = 65;
 const KEY_D = 68;
-//xwl 聊天
-const KEY_ENTER = 13;
+// //xwl 聊天
+// const KEY_ENTER = 13;
 
 const KTY_Space = 32;
-//xwl 聊天
+// xwl 聊天
 let showing;
-let chat = document.getElementById("chat");
-let chatMany = document.getElementById("chatMany");
-let chatLog = document.getElementById("chatLog");
 
 
 class FirstPersonControls {
@@ -26,42 +23,40 @@ class FirstPersonControls {
         this.domElement = domElement || document.body;
         this.isLocked = false;
         this.camera = camera;
-        this.speed = 150;
+        this.speed = 300;
         // 初始化移动状态
         this.moveForward = false;
         this.moveBackward = false;
         this.moveLeft = false;
         this.moveRight = false;
-
-        this.canChat = false;
-        this.chatModel = true; //true ：全体聊天  ; false : 私聊
+        this.canMove = true;
 
         this.clickHandler = this.domElement.requestPointerLock;
-        this.onKeyDown = function(event) {
-            if (this.canChat != true) {
-                if (event.shiftKey)
-                    this.speed = 300;
-                switch (event.keyCode) {
-                    case KEY_W:
-                        this.moveForward = true;
-                        break;
-                    case KEY_A:
-                        this.moveLeft = true;
-                        break;
-                    case KEY_S:
-                        this.moveBackward = true;
-                        break;
-                    case KEY_D:
-                        this.moveRight = true;
-                        break;
-                    case KTY_Space:
-                        this.moveUp = true;
-                        break;
-                }
+        this.onKeyDown = function (event) {
+            if (!this.canMove)
+                return;
+            if (event.shiftKey)
+                this.speed = 500;
+            switch (event.keyCode) {
+                case KEY_W:
+                    this.moveForward = true;
+                    break;
+                case KEY_A:
+                    this.moveLeft = true;
+                    break;
+                case KEY_S:
+                    this.moveBackward = true;
+                    break;
+                case KEY_D:
+                    this.moveRight = true;
+                    break;
+                case KTY_Space:
+                    this.moveUp = true;
+                    break;
             }
 
         };
-        this.onKeyUp = function(event) {
+        this.onKeyUp = function (event) {
             switch (event.keyCode) {
                 case KEY_W:
                     this.moveForward = false;
@@ -78,63 +73,8 @@ class FirstPersonControls {
                 case KTY_Space:
                     this.moveUp = true;
                     break;
-                    //xwl 多人聊天
-                case KEY_ENTER:
-
-                    if (this.canChat) {
-                        let chatTarget = $("#userList").find("option:selected").text();
-
-                        let chatP = document.createElement("p");
-                        chatP.style.maxWidth = "250px";
-                        if (chatMany.value) { //聊天框内有内容
-                            if (chatTarget === "all") {
-                                this.chatModel = true;
-                            } else {
-                                this.chatModel = false;
-                            }
-                            if (this.chatModel) { //全体聊天
-                                chatP.innerHTML = "我：" + (chatMany.value || "");
-                                let userName = document.getElementById("getUserName").text; //获取用户名
-                                chatLog.appendChild(chatP);
-                                socket.emit('chatMany', { name: userName, message: chatMany.value });
-                            } else { //私聊
-
-                                chatP.innerHTML = "To " + chatTarget + ":" + chatMany.value;
-                                chatLog.appendChild(chatP);
-                                let userName = $("#getUserName").text(); //获取用户名
-                                let message = chatMany.value;
-                                let toId = $("#userList").val();
-                                socket.emit('chatOne', { from: userName, to: toId, message: message }); //发送消息给固定用户
-                            }
-                        }
-                        this.canChat = false;
-                        chat.style.display = "none";
-                        if (!showing) {
-                            this.domElement.requestPointerLock();
-                            this.domElement.addEventListener('click', this.domElement.requestPointerLock);
-                        }
-                        if (chatLog.children.length > 2) {
-                            chatLog.lastChild.scrollIntoView();
-                        }
-                    } else {
-                        if (chatLog.children.length > 2) {
-                            chatLog.lastChild.scrollIntoView();
-                        }
-                        document.exitPointerLock();
-                        chat.style.display = "block";
-                        chatMany.focus();
-                        chatMany.value = "";
-                        this.domElement.removeEventListener('click', this.domElement.requestPointerLock);
-                        this.canChat = true;
-                        if (chatLog.children.length > 2) {
-                            chatLog.lastChild.scrollIntoView();
-                        }
-                    }
-                    break;
             }
         };
-
-
 
         // 初始化camera, 将camera放在pitchObject正中央
         camera.rotation.set(0, 0, 0);
@@ -213,7 +153,6 @@ class FirstPersonControls {
         //给向量使用变换矩阵
         rotation.applyMatrix4(m);
 
-
         this.foreRaycaster.set(this.yawObject.position, rotation);
         rotation.X += Math.PI / 2;
         this.leftRaycaster.set(this.yawObject.position, rotation);
@@ -239,29 +178,42 @@ class FirstPersonControls {
         let horOnObject = horizontalIntersections.length > 0 || horizontalIntersections1.lenght > 0 || horizontalIntersections2.length > 0 ||
             horizontalIntersections3.length > 0; //是否产生碰撞
 
-
         // 移动距离等于速度乘上间隔时间delta
         if (!horOnObject) {
             this.yawObject.translateZ(this.speed * direction.z * delta);
             this.yawObject.translateX(this.speed * direction.x * delta);
         }
 
-        //=====xiong
-        this.speed = 150;
+        this.speed = 300;
     };
 
     removeLock() {
-        this.domElement.removeEventListener('click', this.clickHandler);
+        this.domElement.removeEventListener('click', this.domElement.requestPointerLock);
+        document.exitPointerLock();
+        this.canMove = false;
     }
+
+    // addKeyDown() {
+    //     document.addEventListener('keydown', this.onKeyDown.bind(this), false);
+    //     this.domElement.requestPointerLock();
+    //     this.domElement.addEventListener('click', this.domElement.requestPointerLock);
+    // }
+
+    // removeKeyDown() {
+    //     document.removeEventListener('keydown', this.onKeyDown.bind(this), false);
+    //     this.domElement.removeEventListener('click', this.domElement.requestPointerLock);
+    //     document.exitPointerLock();
+    // }
 
     addLock() {
         this.domElement.addEventListener('click', this.clickHandler);
+        this.domElement.requestPointerLock();
+        this.canMove = true;
     }
 
     connect() {
-        //xwl 多人聊天
+        //监听事件
         this.domElement.addEventListener('click', this.clickHandler);
-        // 在函数后面添加bind(this)的目的是什么
         document.addEventListener('pointerlockchange', this.onPointerlockChange.bind(this), false);
         document.addEventListener('pointerlockerror', this.onPointerlockError.bind(this), false);
         document.addEventListener('mousemove', this.onMouseMove.bind(this), false);

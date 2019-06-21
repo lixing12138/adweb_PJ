@@ -14,7 +14,7 @@ const port = 3003;
 // 引入路由模块
 const route = require('./route');
 // 无效路由
-app.use(async(ctx, next) => {
+app.use(async (ctx, next) => {
     await next();
     if (ctx.status == 404) {
         await ctx.render('404');
@@ -47,36 +47,41 @@ app.use(route);
 // chat
 let userMap = new Map();
 //监听
-io.on('connection', function(socket) {
+io.on('connection', function (socket) {
     console.log('client ' + socket.id + ' connected');
     // login事件
-    socket.on('login', function(data) {
+    socket.on('login', function (data) {
         userMap.set(socket.id, data.name);
         io.sockets.emit('login', [...userMap]);
     });
     // 一对一聊天
-    socket.on('chatOne', function(data) {
-        io.to(data.to).emit('chatOne', { message: data.message, from: data.from });
+    socket.on('chatOne', function (data) {
+        io.to(data.to).emit('chatOne', {message: data.message, from: data.from});
     });
     // 一对多聊天
-    socket.on('chatMany', function(data) {
-        socket.broadcast.emit('chatMany', { name: userMap.get(socket.id), message: data.message });
+    socket.on('chatMany', function (data) {
+        socket.broadcast.emit('chatMany', {name: userMap.get(socket.id), message: data.message});
     });
     // 更换外形
-    socket.on('hat', function(data) {
+    socket.on('pet', function (data) {
         data.socketid = socket.id;
         socket.broadcast.emit('hat', data);
     });
     // 上线
-    socket.on('player', function(data) {
+    socket.on('player', function (data) {
         data.socketid = socket.id;
         socket.broadcast.emit('player', data);
     });
     // 离线
-    socket.on('disconnect', function() {
+    socket.on('disconnect', function () {
         console.log('client ' + socket.id + ' disconnected');
         userMap.delete(socket.id);
-        socket.broadcast.emit('offline', { socketid: socket.id });
+        socket.broadcast.emit('offline', {socketid: socket.id});
+    });
+    // 更换名称
+    socket.on('name', function (data) {
+        data.socketid = socket.id;
+        socket.broadcast.emit('name', data);
     });
 });
 server.listen(process.env.PORT || port, () => {
