@@ -8,6 +8,7 @@
 </head>
 
 <body>
+    <div id="q"></div>
     <div id="block">
         <div id="chatLog">
             <div class="scrollbar" id="scrollbar-y"></div>
@@ -63,7 +64,7 @@
             }
         });
         // const socket = io('3.87.214.11:3003');
-        const socket = io('192.168.1.100:3003');
+        const socket = io('192.168.1.102:3003');
     </script>
     <script src="/libs/FirstPersonControl.js"></script>
     <script src="/libs/RectAreaLightUniformsLib.js"></script>
@@ -139,12 +140,6 @@
                 gender: document.getElementById("gender").innerText
             });
 
-            // socket.emit('name', {
-            //     position: museum.fpc.yawObject.position,
-            //     name: document.getElementById("getUserName").innerText,
-            //     level: document.getElementById("getLevel").innerText,
-            //     type: hatType
-            // });
             //播放NPC动画
             for (let i = 0; i < mixers.length; i++) { // 重复播放动画
                 mixers[i].update(delta / playSpeed);
@@ -156,10 +151,13 @@
         function changeRole(oldIndex, newIndex) {
             for (let id of playerMap) {
                 if (sceneMap.get(id[0]) === oldIndex) {
+                    museum.scene.remove(spriteMap.get(id[0]));
                     museum.scene.remove(playerMap.get(id[0]));
                 }
-                if (sceneMap.get(id) === newIndex)
+                if (sceneMap.get(id) === newIndex) {
+                    museum.scene.add(spriteMap.get(id[0]));
                     museum.scene.add(playerMap.get(id[0]));
+                }
             }
         }
         //上线
@@ -202,16 +200,26 @@
                     sprite.position.x = data.position.x;
                     sprite.position.z = data.position.z;
                 }
+
+                socket.emit('name', {
+                    position: museum.fpc.yawObject.position,
+                    name: document.getElementById("getUserName").innerText,
+                    level: document.getElementById("getLevel").innerText,
+                    type: hatType,
+                    index: data.index
+                });
                 //判断用户
                 if (data.index !== sceneMap.get(data.socketid)) {
                     if (sceneMap.get(data.socketid) === museum.index) {
                         museum.scene.remove(playerMap.get(data.socketid));
                         museum.scene.remove(petMap.get(data.socketid));
+                        museum.scene.remove(spriteMap.get(data.socketid));
                     }
                     sceneMap.set(data.socketid, data.index);
                     if (data.index === museum.index) {
                         museum.scene.add(playerMap.get(data.socketid));
                         museum.scene.add(petMap.get(data.socketid));
+                        museum.scene.add(spriteMap.get(data.socketid));
                     }
                 }
             } else {
@@ -245,8 +253,10 @@
                     let textObj = new THREE.Sprite(getName(nameMap.get(data.socketid), levelMap.get(data.socketid)));
                     textObj.scale.set(50, 25, 75);
                     textObj.position.set(data.position.x, data.position.y + 60, data.position.z);
-                    museum.scene.add(textObj);
                     spriteMap.set(data.socketid, textObj);
+                    if (data.index === museum.index) {
+                        museum.scene.add(spriteMap.get(data.socketid));
+                    }
                 }
             }
         });
@@ -300,17 +310,20 @@
         // });
         //名称更换
         socket.on('name', async(data) => {
-            if (!data.name) return;
-            if (!data.level) return;
+            if (!data.name || !data.level) return;
             museum.scene.remove(spriteMap.get(data.socketid));
             nameMap.set(data.socketid, data.name);
             levelMap.set(data.socketid, data.level);
-            let textObj = new THREE.Sprite(getName(data.name, data.level));
+            let textObj = spriteMap.get(data.socketid);
+            textObj = new THREE.Sprite(getName(data.name, data.level));
             textObj.scale.set(50, 25, 75);
             textObj.position.set(data.position.x, data.position.y + 60, data.position.z);
-            museum.scene.add(textObj);
             spriteMap.set(data.socketid, textObj);
-            museum.scene.add(spriteMap.get(data.socketId));
+            document.getElementById("q").innerText = 0;
+            if (data.index === museum.index) {
+                document.getElementById("q").innerText = data.index;
+                museum.scene.add(spriteMap.get(data.socketid));
+            }
 
             let type = data.type;
             if (petMap.get(data.socketid) !== null) {
