@@ -62,8 +62,8 @@
                 window.location.href = "/detail";
             }
         });
-        const socket = io('3.87.214.11:3003');
-        // const socket = io('192.168.1.100:3003');
+        // const socket = io('3.87.214.11:3003');
+        const socket = io('192.168.1.100:3003');
     </script>
     <script src="/libs/FirstPersonControl.js"></script>
     <script src="/libs/RectAreaLightUniformsLib.js"></script>
@@ -98,10 +98,6 @@
             SCREEN_HEIGHT = window.innerHeight;
         socket.emit('login', {
             name: $("#getUserName").text()
-        });
-        socket.emit('name', {
-            name: name,
-            level: level
         });
 
         function init() {
@@ -142,21 +138,16 @@
                 index: museum.index,
                 gender: document.getElementById("gender").innerText
             });
+
+            // socket.emit('name', {
+            //     position: museum.fpc.yawObject.position,
+            //     name: document.getElementById("getUserName").innerText,
+            //     level: document.getElementById("getLevel").innerText,
+            //     type: hatType
+            // });
             //播放NPC动画
             for (let i = 0; i < mixers.length; i++) { // 重复播放动画
                 mixers[i].update(delta / playSpeed);
-            }
-            //判断用户名和称号是否变化
-            let boolean1 = (name !== document.getElementById("getUserName").innerText);
-            let boolean2 = (level !== document.getElementById("getLevel").innerText);
-            if (boolean1 || boolean2) {
-                alert(1);
-                name = document.getElementById("getUserName").innerText;
-                level = document.getElementById("getLevel").innerText;
-                socket.emit('name', {
-                    name: name,
-                    level: level
-                });
             }
             requestAnimationFrame(render);
         }
@@ -171,6 +162,19 @@
                     museum.scene.add(playerMap.get(id[0]));
             }
         }
+        //上线
+        socket.on('login', data => {
+            $("#userList").empty();
+            nameMap.clear();
+            levelMap.clear();
+            $("#userList").append("<option value = 'all'>all</option>");
+            $("#userList").append("<option value = 'npc'>智能小精灵</option>");
+            for (let elem of data.values()) {
+                $("#userList").append("<option value = '" + elem[0] + "'>" + elem[1] + "</option>");
+                nameMap.set(elem[0], elem[1]);
+                levelMap.set(elem[0], "暂无称号");
+            }
+        });
 
         //用户数据和响应
         socket.on('player', data => {
@@ -255,41 +259,63 @@
             petMap.delete(data.socketid);
             nameMap.delete(data.socketid);
             levelMap.delete(data.socketid);
+            museum.scene.remove(spriteMap.get(data.socketid));
+            spriteMap.delete(data.socketid);
         });
         //xwl 多人聊天
         socket.on('chatMany', data => {
-            let chatP = document.createElement("p");
-            chatP.style.maxWidth = "250px";
-            chatP.innerHTML = data.name + ":" + (data.message || "");
-            chatLog.appendChild(chatP);
-            if (chatLog.children.length > 2) {
-                chatLog.lastChild.scrollIntoView();
-            }
+            chatWindow.chatMany(data);
         });
         //私聊
         socket.on('chatOne', data => {
-            let chatP = document.createElement("p");
-            chatP.style.maxWidth = "250px";
-            chatP.innerHTML = data.from + " ：" + (data.message || "");
-            chatLog.appendChild(chatP);
-            if (chatLog.children.length > 2) {
-                chatLog.lastChild.scrollIntoView();
-            }
+            chatWindow.chatOne(data);
         });
-        //上线
-        socket.on('login', data => {
-            $("#userList").empty();
-            $("#userList").append("<option value = 'all'>all</option>");
-            for (let elem of data.values()) {
-                $("#userList").append("<option value = '" + elem[0] + "'>" + elem[1] + "</option>");
-                nameMap.set(elem[0], elem[1]);
-                levelMap.set(elem[0], "暂无称号");
-            }
-        });
+
         //宠物更换
-        socket.on('pet', async(data) => {
+        // socket.on('pet', async(data) => {
+        //     let type = data.type;
+        //     if (petMap.get(data.socketid) !== null) {
+        //         if (parseInt(petMap.get(data.socketid).name) === data.type)
+        //             return;
+        //         if (sceneMap.get(data.socketid) === museum.index)
+        //             museum.scene.remove(petMap.get(data.socketid));
+        //         deleteGroup(petMap.get(data.socketid));
+        //         petMap.set(data.socketid, null);
+        //     }
+        //     if (type === 0)
+        //         return;
+        //     let petModel = null;
+        //     let path = "/resources/pet/" + type + "/scene.gltf";
+        //     let size = petSize[type - 1];
+        //     loader.load(path, function(mesh) {
+        //         mesh.scene.scale.set(size, size, size);
+        //         mesh.scene.position.set(0, petLocate[type - 1], 0);
+        //         mesh.scene.name = "" + type;
+        //         petModel = mesh.scene;
+
+        //         petMap.set(data.socketid, petModel);
+        //         if (sceneMap.get(data.socketid) === museum.index)
+        //             museum.scene.add(petMap.get(data.socketid));
+        //     });
+        // });
+        //名称更换
+        socket.on('name', async(data) => {
+            if (!data.name) return;
+            if (!data.level) return;
+            museum.scene.remove(spriteMap.get(data.socketid));
+            nameMap.set(data.socketid, data.name);
+            levelMap.set(data.socketid, data.level);
+            let textObj = new THREE.Sprite(getName(data.name, data.level));
+            textObj.scale.set(50, 25, 75);
+            textObj.position.set(data.position.x, data.position.y + 60, data.position.z);
+            museum.scene.add(textObj);
+            spriteMap.set(data.socketid, textObj);
+            museum.scene.add(spriteMap.get(data.socketId));
+
             let type = data.type;
             if (petMap.get(data.socketid) !== null) {
+                if (parseInt(petMap.get(data.socketid).name) === data.type)
+                    return;
                 if (sceneMap.get(data.socketid) === museum.index)
                     museum.scene.remove(petMap.get(data.socketid));
                 deleteGroup(petMap.get(data.socketid));
@@ -310,17 +336,6 @@
                 if (sceneMap.get(data.socketid) === museum.index)
                     museum.scene.add(petMap.get(data.socketid));
             });
-        });
-        //名称更换
-        socket.on('name', async(data) => {
-            museum.scene.remove(spriteMap.get(data.socketid));
-            nameMap.set(data.socketid, data.name);
-            levelMap.set(data.socketid, data.level);
-            let textObj = new THREE.Sprite(getName(data.name, data.level));
-            textObj.scale.set(50, 25, 75);
-            textObj.position.set(data.position.x, data.position.y + 60, data.position.z);
-            museum.scene.add(textObj);
-            spriteMap.set(data.socketid, textObj);
         });
         window.addEventListener("resize", function() {
             museum.camera.aspect = window.innerWidth / window.innerHeight;
