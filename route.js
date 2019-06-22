@@ -98,7 +98,7 @@ router.get('/chat', async(ctx) => {
         "reqType": 0,
         "perception": {
             "inputText": {
-                "text": ctx.request.querystring.chat
+                "text": ctx.request.query.chat
             },
             "selfInfo": {
                 "location": {
