@@ -8,7 +8,6 @@
 </head>
 
 <body>
-    <div id="q"></div>
     <div id="block">
         <div id="chatLog">
             <div class="scrollbar" id="scrollbar-y"></div>
@@ -64,7 +63,6 @@
             }
         });
         const socket = io('3.87.214.11:3003');
-        //const socket = io('192.168.1.102:3003');
     </script>
     <script src="/libs/FirstPersonControl.js"></script>
     <script src="/libs/RectAreaLightUniformsLib.js"></script>
@@ -147,19 +145,6 @@
             requestAnimationFrame(render);
         }
 
-        //更换NPC
-        function changeRole(oldIndex, newIndex) {
-            for (let id of playerMap) {
-                if (sceneMap.get(id[0]) === oldIndex) {
-                    museum.scene.remove(spriteMap.get(id[0]));
-                    museum.scene.remove(playerMap.get(id[0]));
-                }
-                if (sceneMap.get(id) === newIndex) {
-                    museum.scene.add(spriteMap.get(id[0]));
-                    museum.scene.add(playerMap.get(id[0]));
-                }
-            }
-        }
         //上线
         socket.on('login', data => {
             $("#userList").empty();
@@ -206,21 +191,15 @@
                     name: document.getElementById("getUserName").innerText,
                     level: document.getElementById("getLevel").innerText,
                     type: hatType,
-                    index: data.index
+                    index: museum.index
                 });
                 //判断用户
                 if (data.index !== sceneMap.get(data.socketid)) {
                     if (sceneMap.get(data.socketid) === museum.index) {
-                        museum.scene.remove(playerMap.get(data.socketid));
                         museum.scene.remove(petMap.get(data.socketid));
                         museum.scene.remove(spriteMap.get(data.socketid));
                     }
                     sceneMap.set(data.socketid, data.index);
-                    if (data.index === museum.index) {
-                        museum.scene.add(playerMap.get(data.socketid));
-                        museum.scene.add(petMap.get(data.socketid));
-                        museum.scene.add(spriteMap.get(data.socketid));
-                    }
                 }
             } else {
                 playerMap.set(data.socketid, null);
@@ -254,9 +233,6 @@
                     textObj.scale.set(50, 25, 75);
                     textObj.position.set(data.position.x, data.position.y + 60, data.position.z);
                     spriteMap.set(data.socketid, textObj);
-                    if (data.index === museum.index) {
-                        museum.scene.add(spriteMap.get(data.socketid));
-                    }
                 }
             }
         });
@@ -281,36 +257,11 @@
             chatWindow.chatOne(data);
         });
 
-        //宠物更换
-        // socket.on('pet', async(data) => {
-        //     let type = data.type;
-        //     if (petMap.get(data.socketid) !== null) {
-        //         if (parseInt(petMap.get(data.socketid).name) === data.type)
-        //             return;
-        //         if (sceneMap.get(data.socketid) === museum.index)
-        //             museum.scene.remove(petMap.get(data.socketid));
-        //         deleteGroup(petMap.get(data.socketid));
-        //         petMap.set(data.socketid, null);
-        //     }
-        //     if (type === 0)
-        //         return;
-        //     let petModel = null;
-        //     let path = "/resources/pet/" + type + "/scene.gltf";
-        //     let size = petSize[type - 1];
-        //     loader.load(path, function(mesh) {
-        //         mesh.scene.scale.set(size, size, size);
-        //         mesh.scene.position.set(0, petLocate[type - 1], 0);
-        //         mesh.scene.name = "" + type;
-        //         petModel = mesh.scene;
-
-        //         petMap.set(data.socketid, petModel);
-        //         if (sceneMap.get(data.socketid) === museum.index)
-        //             museum.scene.add(petMap.get(data.socketid));
-        //     });
-        // });
         //名称更换
         socket.on('name', async(data) => {
             if (!data.name || !data.level) return;
+
+            museum.scene.remove(playerMap.get(data.socketid));
             museum.scene.remove(spriteMap.get(data.socketid));
             nameMap.set(data.socketid, data.name);
             levelMap.set(data.socketid, data.level);
@@ -319,16 +270,20 @@
             textObj.scale.set(50, 25, 75);
             textObj.position.set(data.position.x, data.position.y + 60, data.position.z);
             spriteMap.set(data.socketid, textObj);
-            document.getElementById("q").innerText = -1;
             if (data.index === museum.index) {
-                document.getElementById("q").innerText = data.index;
+                museum.scene.add(playerMap.get(data.socketid));
                 museum.scene.add(spriteMap.get(data.socketid));
             }
 
             let type = data.type;
             if (petMap.get(data.socketid) !== null) {
-                if (parseInt(petMap.get(data.socketid).name) === data.type)
+                museum.scene.remove(petMap.get(data.socketid));
+                if (parseInt(petMap.get(data.socketid).name) === data.type) {
+                    if (data.index === museum.index) {
+                        museum.scene.add(petMap.get(data.socketid));
+                    }
                     return;
+                }
                 if (sceneMap.get(data.socketid) === museum.index)
                     museum.scene.remove(petMap.get(data.socketid));
                 deleteGroup(petMap.get(data.socketid));
@@ -344,7 +299,6 @@
                 mesh.scene.position.set(0, petLocate[type - 1], 0);
                 mesh.scene.name = "" + type;
                 petModel = mesh.scene;
-
                 petMap.set(data.socketid, petModel);
                 if (sceneMap.get(data.socketid) === museum.index)
                     museum.scene.add(petMap.get(data.socketid));
@@ -373,9 +327,13 @@
                     if (distance < 40 && noRepeat) {
                         console.log('enter');
                         noRepeat = false;
-
+                        for (let id of playerMap) {
+                            if (sceneMap.get(id[0]) === (museum.index - 1)) {
+                                museum.scene.remove(spriteMap.get(id[0]));
+                                museum.scene.remove(playerMap.get(id[0]));
+                            }
+                        }
                         if (museum.index !== 0) {
-                            changeRole(museum.index, museum.index - 1);
                             museum.back();
                         }
                     }
@@ -383,21 +341,20 @@
                 case KEY_C:
                     if (hatType >= 0 && hatType < 4) {
                         hatType++;
-                        socket.emit('pet', {
-                            type: hatType
-                        });
                     } else if (type === 4) {
                         hatType = 0;
-                        socket.emit('pet', {
-                            type: hatType
-                        });
                     }
                     break;
                 case KEY_N:
                     if (distance < 40 && noRepeat) {
                         noRepeat = false;
+                        for (let id of playerMap) {
+                            if (sceneMap.get(id[0]) === (museum.index - 1)) {
+                                museum.scene.remove(spriteMap.get(id[0]));
+                                museum.scene.remove(playerMap.get(id[0]));
+                            }
+                        }
                         if (museum.index !== 4) {
-                            changeRole(museum.index, museum.index + 1);
                             museum.forward();
                         }
                     }
